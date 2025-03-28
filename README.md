@@ -13,6 +13,7 @@ This project is a fitness tracking application. You can track individual workout
 
 ## Installation
 Follow these steps to get the project up and running on your local machine:
+* have a todo to dockerize this setup
 
 ### STACK
 [React/Vite]
@@ -23,17 +24,23 @@ Follow these steps to get the project up and running on your local machine:
 1. Clone the repository:
     ```bash
     git clone
-    cd todo-app
+    cd APP_FITNESSTRACKER_V3
     ```
 
 2. Install dependencies:
     ```bash
-    npm install
+    cd frontend
+    npm install <dependencies>
+    cd backend
+    pip install <dependencies>
     ```
 
 3. Run the app locally:
     ```bash
+    cd frontend
     npm start
+    cd backend
+    py app.py
     ```
 
 ## Todos
@@ -47,8 +54,8 @@ Follow these steps to get the project up and running on your local machine:
 - [ ] Create an AI helper to assist with task management
 
 ## CI/CD with Azure
-- Set up continuous integration (CI) and continuous deployment (CD) pipelines through Azure DevOps.
-- Ensure that each push to the repository triggers automated builds, followed by deployment to a staging/production environment.
+- Set up CICD pipelines through Azure DevOps.
+- Ensure that each push to the repository triggers automated builds, followed by deployment.
 
 ## Dockerization
 - Create a `Dockerfile` for the application to containerize it.
