@@ -1,0 +1,90 @@
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Frontend specific
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/.env*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment files (local environment configurations)
+*.env
+*.env.local
+*.env.*.local
+
+# Build output
+build/
+dist/
+
+# Test coverage
+coverage/
+
+# Dependency directories
+node_modules/
+
+# Docker related files (if you’re using Docker)
+.docker/
+
+# GitHub / GitLab CI/CD related
+.gitlab-ci.yml
+.circleci/
+.github/
+
+# OS generated files
+Thumbs.db
+Desktop.ini
+
+# Python bytecode files
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+env/
+
+# Flask environment variables files (don't commit secrets)
+*.env
+*.flaskenv
+
+# Flask instance folder (used for instance-specific configurations)
+instance/
+
+# Logs
+*.log
+logs/
+
+# Database files
+*.sqlite3
+*.db
+
+# IDE/editor configuration files
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+
+# Docker related files (if you are using Docker)
+docker-compose.yml
+Dockerfile
+
+# Tests
+test_*/  # Test directories
