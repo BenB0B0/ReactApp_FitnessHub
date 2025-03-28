@@ -82,7 +82,8 @@ logs/
 docker-compose.yml
 Dockerfile
 
-*/Lib/
-*/var/
-*/__pycache__/
+# Backend stuff
+backend/venv/Lib/
+backend/venv/var/
+backend/venv/__pycache__/
 */Scripts/
