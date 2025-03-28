@@ -1,4 +1,4 @@
-# Todo App Project
+# Fitness Hub Project
 
 ## Table of Contents
 1. [Description](#description)

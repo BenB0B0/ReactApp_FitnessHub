@@ -1,0 +1,7 @@
+Flask
+Flask-SQLAlchemy
+openai
+pinecone-client
+langgraph
+python-dotenv
+jose

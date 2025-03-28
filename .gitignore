@@ -56,10 +56,6 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Virtual environments
-venv/
-env/
-
 # Flask environment variables files (don't commit secrets)
 *.env
 *.flaskenv
@@ -86,5 +82,7 @@ logs/
 docker-compose.yml
 Dockerfile
 
-# Tests
-test_*/  # Test directories
+*/Lib/
+*/var/
+*/__pycache__/
+*/Scripts/
