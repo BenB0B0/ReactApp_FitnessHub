@@ -85,5 +85,6 @@ Dockerfile
 # Backend stuff
 backend/venv/Lib/
 backend/venv/var/
+backend/venv/Scripts/
 backend/venv/__pycache__/
 */Scripts/
