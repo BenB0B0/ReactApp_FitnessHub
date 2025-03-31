@@ -3,6 +3,7 @@ import { Workout } from '../types/workout';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useWorkout } from "../context/WorkoutContext";
 import { useAuth } from "../context/AuthContext";
+import { PinMap, Stopwatch, Youtube, Calendar } from "react-bootstrap-icons";
 
 interface WorkoutFormProps {
     setIsFormVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,10 +16,10 @@ const WorkoutsForm = ({ setIsFormVisible }: WorkoutFormProps) => {
     const [formData, setFormData] = useState({
         user_id: '',
         name: '',
-        length: 0,
+        time_length: 0,
+        distance: 0,
         url: '',
-        is_miles: false,
-        date: ''
+        date: new Date().toISOString().split('T')[0]
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -45,9 +46,9 @@ const WorkoutsForm = ({ setIsFormVisible }: WorkoutFormProps) => {
         const newWorkout: Workout = {
             user_id: userId,
             name: formData.name,
-            length: formData.length,
+            time_length: formData.time_length,
+            distance: formData.distance,
             url: formData.url,
-            is_miles: formData.is_miles,
             date: formData.date,
             id: ''
         };
@@ -67,32 +68,42 @@ const WorkoutsForm = ({ setIsFormVisible }: WorkoutFormProps) => {
                     <Form.Group className="mb-3" controlId="exampleForm.ControlSelect1">
                         <Form.Label>Workout Name</Form.Label>
                         <Form.Select name="name" value={formData.name} onChange={handleChange} required>
-                        <option value="">Select a workout</option>
+                            <option value="">Select a workout</option>
                             {workoutOptions.map((option) => (
                                 <option key={option.value} value={option.value}>
-                                     {option.label}
+                                    {option.label}
                                 </option>
                             ))}
                         </Form.Select>
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                        <Form.Label><small className="form-text text-muted">Length</small></Form.Label>
-                        <Form.Control name="length" type="number" value={formData.length} onChange={handleChange} required />
-                    </Form.Group>
-                    <div className="mb-3">
-                        <Form.Check label={<small className="form-text text-muted">Miles</small>} id="miles" name="is_miles" type="radio" value="true" checked={formData.is_miles === true} onChange={() => setFormData({ ...formData, is_miles: true })} />
-                        <Form.Check label={<small className="form-text text-muted">Minutes</small>} id="minutes" name="is_miles" type="radio" value="false" checked={formData.is_miles === false} onChange={() => setFormData({ ...formData, is_miles: false })} />
-                    </div>
-                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                        <Form.Label><small className="form-text text-muted">Video URL</small></Form.Label>
-                        <Form.Control name="url" type="url" value={formData.url} onChange={handleChange} />
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                        <Form.Label><small className="form-text text-muted">Date</small></Form.Label>
-                        <Form.Control name="date" type="date" 
-                        value={formData.date}
-                        onChange={handleChange} required />
-                    </Form.Group>
+                    {formData.name && <>
+                        {workoutOptions.find(option => option.value === formData.name)?.distance_req &&
+                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                                <PinMap className="me-2" />
+                                <Form.Label><small className="form-text text-muted">Distance (miles)</small></Form.Label>
+                                <Form.Control name="distance" type="number" value={formData.distance} onChange={handleChange} />
+                            </Form.Group>
+                        }
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                            <Stopwatch className="me-2" />
+                            <Form.Label><small className="form-text text-muted">Activity Length (minutes)</small></Form.Label>
+                            <Form.Control name="time_length" type="number" value={formData.time_length} onChange={handleChange} />
+                        </Form.Group>
+                        {workoutOptions.find(option => option.value === formData.name)?.url_req &&
+                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                                <Youtube className="me-2" />
+                                <Form.Label><small className="form-text text-muted">Video URL</small></Form.Label>
+                                <Form.Control name="url" type="url" value={formData.url} onChange={handleChange} />
+                            </Form.Group>
+                        }
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                            <Calendar className="me-2" />
+                            <Form.Label><small className="form-text text-muted">Date</small></Form.Label>
+                            <Form.Control name="date" type="date"
+                                value={formData.date}
+                                onChange={handleChange} required />
+                        </Form.Group>
+                    </>}
                 </Form>
             </Modal.Body>
 

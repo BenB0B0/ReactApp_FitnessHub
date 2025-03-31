@@ -14,7 +14,7 @@ const Workouts = () => {
     const { isTableView, setIsTableView } = useWorkout();
     const [currentPage, setCurrentPage] = useState(1);
 
-    // **** PAGINATION CONTROLS ****
+    // **** PAGINATION CONTROLS **** <-- COMPONETIZE THIS LATER
     const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
     const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
     const currentWorkouts = workouts.slice(indexOfFirstItem, indexOfLastItem);

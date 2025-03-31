@@ -1,17 +1,9 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import { Workout } from "../types/workout";
+import { Workout, WorkoutOption, workoutOptions } from "../types/workout";
 import * as workoutService from "../services/workoutService";
 import { useAuth } from "../context/AuthContext";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { faPersonRunning, faDumbbell, faBolt , faBasketball, faSpa } from "@fortawesome/free-solid-svg-icons";
 
-
-interface WorkoutOption {
-    value: string;
-    label: string;
-    icon: IconDefinition;
-}
 
 // Define the context type
 interface WorkoutContextType {
@@ -58,6 +50,7 @@ export const WorkoutProvider: React.FC<{ children: ReactNode }> = ({ children })
     const addWorkout = async (newWorkout: Workout) => {
         try {
             const addedWorkout = await workoutService.addWorkout(newWorkout); 
+
             setWorkouts((prevWorkouts) => {
                 const updatedWorkouts = [addedWorkout, ...prevWorkouts]; 
                 return sortWorkoutsByDate(updatedWorkouts); 
@@ -76,17 +69,6 @@ export const WorkoutProvider: React.FC<{ children: ReactNode }> = ({ children })
             console.error(error);
         }
     };
-
-    // Workout Types
-    const workoutOptions: WorkoutOption[] = [
-        { value: "Run", label: "Run", icon: faPersonRunning },
-        { value: "Upperbody Lift", label: "Upperbody Lift", icon: faDumbbell },
-        { value: "Lowerbody Lift", label: "Lowerbody Lift", icon: faDumbbell },
-        { value: "Fullbody Lift", label: "Fullbody Lift", icon: faDumbbell },
-        { value: "HIIT", label: "HIIT", icon: faBolt },
-        { value: "Basketball", label: "Basketball", icon: faBasketball },
-        { value: "Yoga", label: "Yoga", icon: faSpa },
-    ];
 
     useEffect(() => {
         localStorage.setItem('isTableView', JSON.stringify(isTableView));

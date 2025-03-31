@@ -40,7 +40,7 @@ const WorkoutCard = ({ workout }: WorkoutsCardProps) => {
           <div className="d-flex justify-content-between align-items-center mb-2">
             <div className="d-flex align-items-center">
               <Calendar2Check className="me-2" />
-              <span>{new Date(workout.date).toLocaleDateString('en-US')}</span>
+              <span>{new Date(workout.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</span>
             </div>
 
             {/* YouTube Link aligned to the right */}
@@ -56,11 +56,19 @@ const WorkoutCard = ({ workout }: WorkoutsCardProps) => {
             )}
           </div>
 
-          {/* Length with Icon */}
+          {/* Distance with Icon */}
+          {workout.distance != 0 ? (
           <div className="d-flex align-items-center mb-2">
-            {workout.is_miles ? <Signpost /> : <Clock />}
-            <span className="ms-2">{workout.length} {workout.is_miles ? 'Miles' : 'Minutes'}</span>
-          </div>
+            <Signpost />
+            <span className="ms-2">{workout.distance} Miles</span>
+          </div>):("")}
+
+          {/* Time Length with Icon */}
+          {workout.time_length != 0 ? (
+          <div className="d-flex align-items-center mb-2">
+            <Clock />
+            <span className="ms-2">{workout.time_length} Minutes</span>
+          </div>):("")}
 
 
         </ListGroup.Item>

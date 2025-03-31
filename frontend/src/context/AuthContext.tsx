@@ -1,6 +1,6 @@
 // Manages authentication
 import { ReactNode, createContext, useContext, useEffect, useState  } from "react";
-import { IdToken, useAuth0 } from "@auth0/auth0-react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const AUTH_URL = import.meta.env.VITE_BACKEND_URL + '/authorize';
 
@@ -11,7 +11,7 @@ interface AuthContextType {
   userId: string | null;
   login: () => void;
   handleLogout: () => void;
-  getToken: () => Promise<IdToken | null | undefined>;
+  getToken: () => Promise<string | null>;
   isLoading: boolean;
 }
 
@@ -20,14 +20,15 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 // AuthProvider component
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { isAuthenticated, user, loginWithRedirect, logout, getIdTokenClaims, isLoading } = useAuth0();
+  const { isAuthenticated, user, loginWithRedirect, logout, getAccessTokenSilently, isLoading } = useAuth0();
   const [localUserId, setLocalUserId] = useState<string | null>(null);
 
   // Function to get the access token
   const getToken = async () => {
     if (!isAuthenticated) return null;
     try {
-      return await getIdTokenClaims();
+      const token = await getAccessTokenSilently();
+      return token;
     } catch (error) {
       console.error("Error getting token:", error);
       return null;
@@ -36,20 +37,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Handle user creation on successful login
   useEffect(() => {
-    if (isAuthenticated && user) {
+    if (isAuthenticated && user) {      
       getToken().then((token) => {
-        const tokenWithRaw = token as any;
         if (token) {
           fetch(AUTH_URL, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${tokenWithRaw.__raw}`, 
+              'Authorization': `Bearer ${token}`, 
             },
           })
             .then((response) => response.json())
             .then((data) => {
-              console.log("User successfully created in database", data)
+              console.log(data)
               setLocalUserId(data["user_id"]);
             })
             .catch((error) => {
