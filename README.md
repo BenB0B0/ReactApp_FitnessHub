@@ -13,7 +13,7 @@ This project is a fitness tracking application. You can track individual workout
 
 ## Installation
 Follow these steps to get the project up and running on your local machine:
-* have a todo to dockerize this setup
+> (have a todo to dockerize this setup)
 
 ### STACK
 [React/Vite]
@@ -44,7 +44,7 @@ Follow these steps to get the project up and running on your local machine:
     ```
 
 ## Todos
-<WORKOUT_PAGE>
+1. WORKOUT PAGE:
 - [x] Create a Git repository for the project
 - [x] Cards extend
 - [x] Edit functionality for cards
@@ -54,15 +54,15 @@ Follow these steps to get the project up and running on your local machine:
 - [ ] More detail
 - [ ] Calendar view
 - [ ] Export to excel/csv
-<OTHER_PAGES>
+2. OTHER PAGES:
 - [ ] Routines  / Workout planner page
 - [ ] Stats page
 - [ ] Home/splash/welcome screen
-<AI>
+3. AI:
 - [ ] Create an AI helper to assist with task management
-<EXTERNAL_SOURCES>
+4. OUTSIDE SOURCES:
 - [ ] Strava API
-<PIPELINE>
+5. PIPELINE:
 - [ ] Dockerize the application
 - [ ] Set up CI/CD flow through Azure
 
