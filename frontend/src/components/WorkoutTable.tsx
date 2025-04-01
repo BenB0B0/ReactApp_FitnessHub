@@ -70,7 +70,11 @@ const WorkoutTables = ({ workouts }: WorkoutsTableProps) => {
              {/* Delete */}
             <td className="text-center w-auto" style={{ width: 'auto', whiteSpace: 'nowrap' }}>
               <Trash
-                onClick={() => deleteWorkout(workout_.id)}
+                onClick={() => {
+                  if (window.confirm("Are you sure you want to delete this workout?")) {
+                    deleteWorkout(workout_.id);
+                  }
+                }}
                 className="fs-6 text-danger"
                 style={{ cursor: 'pointer', transition: 'transform 0.2s ease, color 0.2s ease' }}
                 onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}

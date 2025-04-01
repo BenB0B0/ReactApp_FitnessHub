@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, Button, ListGroup, Collapse } from "react-bootstrap";
 import { Trash, Youtube, Calendar2Check, Clock, Signpost, Activity } from "react-bootstrap-icons";
 import { Workout } from '../types/workout';
@@ -7,20 +7,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface WorkoutsCardProps {
   workout: Workout;
+  expandAll: boolean;
+  onEdit: () => void;
 }
 
-const WorkoutCard = ({ workout }: WorkoutsCardProps) => {
+const WorkoutCard = ({ workout, expandAll, onEdit }: WorkoutsCardProps) => {
 
   const normalizedWorkoutDate = (new Date(workout.date).toLocaleDateString('en-US', { timeZone: 'UTC' }));
   const normalizedToday = (new Date().toLocaleDateString('en-US', { timeZone: 'UTC' }))
-
-  const { deleteWorkout, workoutOptions, setIsFormVisible } = useWorkout();
   const [open, setOpen] = useState(false);
+  const { deleteWorkout, workoutOptions } = useWorkout();
+
 
   const findIconForWorkout = (workoutName: string) => {
     const workoutOption = workoutOptions.find(option => option.value === workoutName);
     return workoutOption ? workoutOption.icon : null;
   };
+
+  useEffect(() => {
+    setOpen(expandAll);
+  }, [expandAll]);
 
   const workoutIcon = findIconForWorkout(workout.name);
 
@@ -30,7 +36,7 @@ const WorkoutCard = ({ workout }: WorkoutsCardProps) => {
       <Card.Header
         className="bg-dark text-white"
         style={{ cursor: 'pointer' }}
-        onClick={() => setOpen(!open)}
+        onClick={() => setOpen(prev => !prev)}
       >
         <div className="d-flex align-items-center justify-content-between w-100">
           {/* Left side: workout icon and name */}
@@ -38,14 +44,11 @@ const WorkoutCard = ({ workout }: WorkoutsCardProps) => {
             {workoutIcon ? (
               <FontAwesomeIcon
                 icon={workoutIcon}
-                className="me-2 text-warning"
+                className="me-2 text-warning hover-scale"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setIsFormVisible((prev) => !prev);
+                  onEdit();
                 }}
-                style={{ cursor: 'pointer', transition: 'transform 0.2s ease, color 0.2s ease' }}
-                onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
-                onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
               />
             ) : (
               <Activity className="me-2" />
@@ -102,7 +105,12 @@ const WorkoutCard = ({ workout }: WorkoutsCardProps) => {
 
           {/* Delete Button */}
           <div className="d-flex justify-content-end p-2">
-            <Button type="button" form="workoutForm" variant="outline-danger" onClick={() => deleteWorkout(workout.id)}>
+            <Button type="button" form="workoutForm" variant="outline-danger" 
+              onClick={() => {
+                if (window.confirm("Are you sure you want to delete this workout?")) {
+                  deleteWorkout(workout.id);
+                }
+              }}>
               <Trash className="fs-6" />
             </Button>
           </div>

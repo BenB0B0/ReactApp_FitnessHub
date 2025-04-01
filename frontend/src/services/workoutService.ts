@@ -40,6 +40,26 @@ export const addWorkout = async (newWorkout: any): Promise<any> => {
     }
 };
 
+// Add a workout
+export const editWorkout = async (newWorkout: any): Promise<any> => {
+    try {
+        const response = await fetch(`${BASE_URL}/${newWorkout.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newWorkout),
+        });
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Failed to edit workout: ' + response.statusText);
+        }
+    } catch (error) {
+        throw new Error('Error editing workout: ' + error);
+    }
+};
+
 // Delete a workout
 export const deleteWorkout = async (workoutId: string): Promise<void> => {
     try {

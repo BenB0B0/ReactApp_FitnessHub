@@ -13,6 +13,7 @@ interface WorkoutContextType {
     setWorkouts: React.Dispatch<React.SetStateAction<Workout[]>>;
     getWorkouts: () => Promise<void>;
     addWorkout: (newWorkout: Workout) => void;
+    editWorkout: (newWorkout: Workout) => void;
     deleteWorkout: (workoutId: string) => void;
     workoutOptions: WorkoutOption[];
     isFormVisible: boolean;
@@ -69,6 +70,22 @@ export const WorkoutProvider: React.FC<{ children: ReactNode }> = ({ children })
         }
     };
 
+    // Edit existing workout
+    const editWorkout = async (newWorkout: Workout) => {
+        try {
+            const addedWorkout = await workoutService.editWorkout(newWorkout); 
+
+            setWorkouts((prevWorkouts) => {
+                const updatedWorkouts = prevWorkouts.map((w) =>
+                  w.id === addedWorkout.id ? addedWorkout : w
+                );
+                return sortWorkoutsByDate(updatedWorkouts);
+              });
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     // Delete workout
     const deleteWorkout = async (workoutId: string) => {
         try {
@@ -98,6 +115,7 @@ export const WorkoutProvider: React.FC<{ children: ReactNode }> = ({ children })
             setWorkouts, 
             getWorkouts, 
             addWorkout, 
+            editWorkout,
             deleteWorkout, 
             workoutOptions,
             isFormVisible,

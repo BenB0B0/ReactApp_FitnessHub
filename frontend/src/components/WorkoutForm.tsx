@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Workout } from '../types/workout';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useWorkout } from "../context/WorkoutContext";
@@ -8,18 +8,40 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 
 
-const WorkoutsForm = () => {
+type WorkoutsFormProps = {
+    initialFormData?: Workout; 
+};
+
+const WorkoutsForm: React.FC<WorkoutsFormProps> = ({ initialFormData }) => {
     const { userId } = useAuth();
-    const { addWorkout, workoutOptions, setIsFormVisible } = useWorkout();
+    const { addWorkout, editWorkout, workoutOptions, setIsFormVisible } = useWorkout();
     const [loading, setLoading] = useState(false);
+    const [editing, setEditing] = useState(false);
+    
     const [formData, setFormData] = useState({
         user_id: '',
         name: '',
         time_length: 0,
         distance: 0,
         url: '',
-        date: new Date().toISOString().split('T')[0]
+        date: new Date().toISOString().split('T')[0],
+        id: ''
     });
+
+    useEffect(() => {
+        if (initialFormData) {
+            setEditing(true);
+            setFormData({
+                user_id: initialFormData.user_id ?? '',
+                name: initialFormData.name ?? '',
+                time_length: initialFormData.time_length ?? 0,
+                distance: initialFormData.distance ?? 0,
+                url: initialFormData.url ?? '',
+                date: initialFormData.date ? new Date(initialFormData.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+                id: initialFormData.id ?? ''
+            });
+        }
+      }, [initialFormData]);
 
     const findIconForWorkout = (workoutName: string) => {
         const workoutOption = workoutOptions.find(option => option.value === workoutName);
@@ -54,10 +76,15 @@ const WorkoutsForm = () => {
             distance: formData.distance,
             url: formData.url,
             date: formData.date,
-            id: ''
+            id: formData.id
         };
 
-        addWorkout(newWorkout);
+        if (editing) {
+            editWorkout(newWorkout);
+        } else {
+            addWorkout(newWorkout);
+        }
+        
         handleCloseModal();
         setLoading(false);
     };
@@ -65,7 +92,7 @@ const WorkoutsForm = () => {
     return (
         <Modal show={true}>
             <Modal.Header className="bg-warning text-black d-flex justify-content-between align-items-center">
-                <Modal.Title>Add New Workout</Modal.Title>
+                <Modal.Title>{editing ? "Edit Workout" : "Add New Workout"}</Modal.Title>
                 <FontAwesomeIcon
                     icon={findIconForWorkout(formData.name) || faPencil}
                     className="p-2"
@@ -122,7 +149,12 @@ const WorkoutsForm = () => {
                     variant="primary"
                     disabled={loading}
                 >
-                    {loading ? 'Submitting...' : 'Submit'}
+                    {editing ? (
+                        <>{loading ? 'Updating...' : 'Update'}</>
+                    ) : (
+                        <>{loading ? 'Submitting...' : 'Submit'}</>
+                    )}
+                    
                 </Button>
                 <Button variant="secondary" onClick={handleCloseModal}>
                     Close
