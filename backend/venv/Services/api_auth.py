@@ -33,7 +33,7 @@ def verify_auth0_token(token):
                     token,
                     public_key,
                     algorithms=["RS256"],
-                    audience=os.getenv('AUTH0_CLIENT_ID'),
+                    audience=os.getenv('AUTH0_AUDIENCE'),
                     issuer=f"https://{auth0_domain}/"
                 )
                 return payload  # Return the decoded token payload (user info)
@@ -46,15 +46,33 @@ def verify_auth0_token(token):
     except Exception as e:
         print(f"Error decoding token: {str(e)}")
         return None
+    
+
+def get_user_info(token):
+    auth0_domain = os.getenv('AUTH0_DOMAIN')
+    userinfo_url = f"https://{auth0_domain}/userinfo"
+    headers = {"Authorization": f"Bearer {token}"}
+    response = requests.get(userinfo_url, headers=headers)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None
 
 @auth_bp.route('/authorize', methods=['POST'])
-def create_user():
+def authorize_user():
+    # ------- VERIFY TOKEN IS VALID ------- #
     auth_header = request.headers.get("Authorization", None)
     if not auth_header:
         return jsonify({"error": "Missing authorization header"}), 401
 
     token = auth_header.split(" ")[1]  # Extract token from "Bearer <token>"
-    user_info = verify_auth0_token(token)
+    token_payload = verify_auth0_token(token)
+    if not token_payload:
+        return jsonify({"error": "Invalid token"}), 403
+    
+    # ------- NOW GET USER INFO (add to DB if new) ------- #
+    user_info = get_user_info(token)
+    print(user_info)
 
     if not user_info:
         return jsonify({"error": "Invalid token"}), 403

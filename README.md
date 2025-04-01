@@ -44,14 +44,22 @@ Follow these steps to get the project up and running on your local machine:
     ```
 
 ## Todos
-- [ ] Create a Git repository for the project
+- [x] Create a Git repository for the project
+- [x] Cards extend
+- [ ] Implement edit functionality for workouts
+- [ ] Banner notifications on delete/create
+- [ ] Implement search/filter functionality
+- [ ] More detail
+- [ ] Calendar view
+- [ ] Routines  / Workout planner page
+- [ ] Stats page
+- [ ] Home/splash/welcome screen
+
+- [ ] Create an AI helper to assist with task management
+- [ ] Strava API
+
 - [ ] Dockerize the application
 - [ ] Set up CI/CD flow through Azure
-- [ ] Create a home/splash/welcome screen
-- [ ] Implement search/filter functionality
-- [ ] Create a stats page
-- [ ] Implement edit functionality for tasks
-- [ ] Create an AI helper to assist with task management
 
 ## CI/CD with Azure
 - Set up CICD pipelines through Azure DevOps.

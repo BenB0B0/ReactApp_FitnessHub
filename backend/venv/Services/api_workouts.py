@@ -8,6 +8,7 @@ workouts_bp = Blueprint('workouts', __name__)
 
 @workouts_bp.route('/api/delete-workout/<int:id>', methods=['DELETE'])
 def delete_workout(id):
+    print("ID Deleted: ",id)
     workout = Workout.query.get(id)
     if workout:
         db.session.delete(workout) 
@@ -19,8 +20,7 @@ def delete_workout(id):
 
 @workouts_bp.route('/api/workouts', methods=['POST'])
 def create_workout():
-    data = request.json  
-    print(data)
+    data = request.json
     # Convert the date string to a datetime.date object (backend)
     try:
         workout_date = datetime.strptime(data['date'], '%Y-%m-%d').date()
@@ -30,29 +30,31 @@ def create_workout():
     new_workout = Workout(
                 user_id=data['user_id'],
                 name=data['name'],
-                length=data['length'],
+                time_length=data['time_length'],
+                distance=data['distance'],
                 url=data['url'],
-                is_miles=data['is_miles'],
                 date=workout_date
             )
-    
     db.session.add(new_workout)
     db.session.commit()
+
+    data['id'] = new_workout.id
+    print("Workout Added: ", data)
     return jsonify(data), 201
 
 
 @workouts_bp.route('/api/workouts', methods=['GET'])
 def get_workouts():
    
-    workouts = Workout.query.filter_by(user_id= request.args.get('userId'))
+    workouts = Workout.query.filter_by(user_id = request.args.get('userId'))
 
     # Convert the workouts to a list of dictionaries to send in the response
     workout_list = [
         {
             'id': workout.id,
             'name': workout.name,
-            'length': workout.length,
-            'is_miles': workout.is_miles,
+            'time_length': workout.time_length,
+            'distance': workout.distance,
             'url': workout.url,
             'date': workout.date
         } for workout in workouts

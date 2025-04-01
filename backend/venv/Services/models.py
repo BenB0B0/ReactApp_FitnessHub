@@ -5,8 +5,8 @@ from sqlalchemy.sql import func
 class Workout(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(10000))
-    length = db.Column(db.Float)
-    is_miles = db.Column(db.Boolean, default=True)
+    time_length = db.Column(db.Float)
+    distance = db.Column(db.Float)
     url = db.Column(db.String(10000))
     date = db.Column(db.Date, default=func.current_date())
     user_id = db.Column(db.String, db.ForeignKey('user.id'))
