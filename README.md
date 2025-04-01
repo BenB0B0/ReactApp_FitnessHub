@@ -44,20 +44,25 @@ Follow these steps to get the project up and running on your local machine:
     ```
 
 ## Todos
+<WORKOUT_PAGE>
 - [x] Create a Git repository for the project
 - [x] Cards extend
-- [ ] Implement edit functionality for workouts
-- [ ] Banner notifications on delete/create
-- [ ] Implement search/filter functionality
+- [x] Edit functionality for cards
+- [ ] Edit functionality for table
+- [ ] Banner notifications on delete/create/edit
+- [ ] Search/filter functionality
 - [ ] More detail
 - [ ] Calendar view
+- [ ] Export to excel/csv
+<OTHER_PAGES>
 - [ ] Routines  / Workout planner page
 - [ ] Stats page
 - [ ] Home/splash/welcome screen
-
+<AI>
 - [ ] Create an AI helper to assist with task management
+<EXTERNAL_SOURCES>
 - [ ] Strava API
-
+<PIPELINE>
 - [ ] Dockerize the application
 - [ ] Set up CI/CD flow through Azure
 
