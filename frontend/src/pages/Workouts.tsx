@@ -9,9 +9,7 @@ const ITEMS_PER_PAGE = 16;
 
 const Workouts = () => {
     // **** STATE CALLS ****
-    const { workouts, getWorkouts } = useWorkout();
-    const [isFormVisible, setIsFormVisible] = useState(false);
-    const { isTableView, setIsTableView } = useWorkout();
+    const { workouts, getWorkouts, isTableView, setIsTableView, isFormVisible, setIsFormVisible } = useWorkout();
     const [currentPage, setCurrentPage] = useState(1);
 
     // **** PAGINATION CONTROLS **** <-- COMPONETIZE THIS LATER

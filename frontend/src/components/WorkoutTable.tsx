@@ -22,9 +22,9 @@ const WorkoutTables = ({ workouts }: WorkoutsTableProps) => {
       <thead>
         <tr>
           <th>Workout Name</th>
-          <th>Date</th>
-          <th>Distance (miles)</th>
-          <th>Time (minutes)</th>
+          <th>Date <Calendar2Check /> </th>
+          <th>Distance (miles) <Signpost /></th>
+          <th>Time (minutes) <Clock /></th>
           <th className='w-auto' style={{ width: 'auto', whiteSpace: 'nowrap' }}></th>
           <th className='w-auto' style={{ width: 'auto', whiteSpace: 'nowrap' }}></th>
         </tr>
@@ -43,19 +43,18 @@ const WorkoutTables = ({ workouts }: WorkoutsTableProps) => {
             {/* Date with Icon */}
             <td>
               <div className="d-flex align-items-center">
-                <Calendar2Check className="me-2" />
                 <span>{new Date(workout_.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</span>
               </div>
             </td>
 
              {/* Distance with Icon */}
             <td> <div className="d-flex align-items-center">
-              {workout_.distance != 0 ? (<><Signpost />  <span className="ms-2"> {workout_.distance} </span></>):("")} 
+              {workout_.distance != 0 ? (<><span className="ms-2"> {workout_.distance} </span></>):("")} 
             </div> </td>
 
             {/* Time Length with Icon */}
             <td> <div className="d-flex align-items-center"> 
-              {workout_.time_length != 0 ? (<><Clock />  <span className="ms-2"> {workout_.time_length} </span></>):("")} 
+              {workout_.time_length != 0 ? (<><span className="ms-2"> {workout_.time_length} </span></>):("")} 
             </div> </td>
 
              {/* Video URL */}

@@ -4,14 +4,13 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { useWorkout } from "../context/WorkoutContext";
 import { useAuth } from "../context/AuthContext";
 import { PinMap, Stopwatch, Youtube, Calendar } from "react-bootstrap-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPencil } from "@fortawesome/free-solid-svg-icons";
 
-interface WorkoutFormProps {
-    setIsFormVisible: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
-const WorkoutsForm = ({ setIsFormVisible }: WorkoutFormProps) => {
+const WorkoutsForm = () => {
     const { userId } = useAuth();
-    const { addWorkout, workoutOptions } = useWorkout();
+    const { addWorkout, workoutOptions, setIsFormVisible } = useWorkout();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         user_id: '',
@@ -21,6 +20,11 @@ const WorkoutsForm = ({ setIsFormVisible }: WorkoutFormProps) => {
         url: '',
         date: new Date().toISOString().split('T')[0]
     });
+
+    const findIconForWorkout = (workoutName: string) => {
+        const workoutOption = workoutOptions.find(option => option.value === workoutName);
+        return workoutOption ? workoutOption.icon : null;
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -60,8 +64,12 @@ const WorkoutsForm = ({ setIsFormVisible }: WorkoutFormProps) => {
 
     return (
         <Modal show={true}>
-            <Modal.Header className="bg-warning text-black">
+            <Modal.Header className="bg-warning text-black d-flex justify-content-between align-items-center">
                 <Modal.Title>Add New Workout</Modal.Title>
+                <FontAwesomeIcon
+                    icon={findIconForWorkout(formData.name) || faPencil}
+                    className="p-2"
+                />
             </Modal.Header>
             <Modal.Body>
                 <Form id="workoutForm" onSubmit={handleSubmit}>

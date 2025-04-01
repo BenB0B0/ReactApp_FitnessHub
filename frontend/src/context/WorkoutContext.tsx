@@ -15,6 +15,10 @@ interface WorkoutContextType {
     addWorkout: (newWorkout: Workout) => void;
     deleteWorkout: (workoutId: string) => void;
     workoutOptions: WorkoutOption[];
+    isFormVisible: boolean;
+    setIsFormVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    workoutsLoading: boolean;
+    setWorkoutsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // Create the context with a default undefined value
@@ -25,6 +29,8 @@ export const WorkoutProvider: React.FC<{ children: ReactNode }> = ({ children })
     const { userId, isLoading } = useAuth(); // Get userId from AuthContext
     const storedTableView = localStorage.getItem('isTableView') === 'true';
     const [isTableView, setIsTableView] = useState<boolean>(storedTableView || false);
+    const [isFormVisible, setIsFormVisible] = useState<boolean>(false);
+    const [workoutsLoading, setWorkoutsLoading] = useState<boolean>(true);
     const [workouts, setWorkouts] = useState<Workout[]>([]);
 
     const sortWorkoutsByDate = (workouts: Workout[]) => {
@@ -39,10 +45,13 @@ export const WorkoutProvider: React.FC<{ children: ReactNode }> = ({ children })
         }
 
         try {
+            setWorkoutsLoading(true);
             const data = await workoutService.fetchWorkouts(userId); 
             setWorkouts(sortWorkoutsByDate(data));
+            setWorkoutsLoading(false);
         } catch (error) {
             console.error(error);
+            setWorkoutsLoading(false);
         }
     };
 
@@ -82,7 +91,20 @@ export const WorkoutProvider: React.FC<{ children: ReactNode }> = ({ children })
     }, [userId]); // Dependency on userId
 
     return (
-        <WorkoutContext.Provider value={{ isTableView, setIsTableView, workouts, setWorkouts, getWorkouts, addWorkout, deleteWorkout, workoutOptions }}>
+        <WorkoutContext.Provider value={{ 
+            isTableView, 
+            setIsTableView, 
+            workouts, 
+            setWorkouts, 
+            getWorkouts, 
+            addWorkout, 
+            deleteWorkout, 
+            workoutOptions,
+            isFormVisible,
+            setIsFormVisible,
+            workoutsLoading,
+            setWorkoutsLoading
+        }}>
             {isLoading ? <LoadingSpinner /> : children} {/* Show loading state */}
         </WorkoutContext.Provider>
     );
