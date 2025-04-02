@@ -7,8 +7,10 @@ import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
 function NavBar() {
+  // **** CONTEXTS ****
   const { isAuthenticated, login, handleLogout, user } = useAuth();
 
+  // **** RETURN LOGIC ****
   return (
     <Navbar data-bs-theme="dark" expand="lg" className="bg-body-tertiary">
       <Container>

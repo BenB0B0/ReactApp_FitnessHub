@@ -1,10 +1,10 @@
-// Manages authentication
 import { ReactNode, createContext, useContext, useEffect, useState  } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
+// Global Variables
 const AUTH_URL = import.meta.env.VITE_BACKEND_URL + '/authorize';
 
-// Define the shape of the AuthContext
+// AuthContext Definition
 interface AuthContextType {
   isAuthenticated: boolean;
   user: any;
@@ -15,7 +15,7 @@ interface AuthContextType {
   isLoading: boolean;
 }
 
-// Create the AuthContext
+// Create AuthContext
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // AuthProvider component
@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated, user, loginWithRedirect, logout, getAccessTokenSilently, isLoading } = useAuth0();
   const [localUserId, setLocalUserId] = useState<string | null>(null);
 
-  // Function to get the access token
+  // Get the access token
   const getToken = async () => {
     if (!isAuthenticated) return null;
     try {

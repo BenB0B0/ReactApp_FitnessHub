@@ -12,24 +12,29 @@ interface WorkoutsCardProps {
 }
 
 const WorkoutCard = ({ workout, expandAll, onEdit }: WorkoutsCardProps) => {
-
-  const normalizedWorkoutDate = (new Date(workout.date).toLocaleDateString('en-US', { timeZone: 'UTC' }));
-  const normalizedToday = (new Date().toLocaleDateString('en-US', { timeZone: 'UTC' }))
+  // **** STATES ****
   const [open, setOpen] = useState(false);
+  // **** CONTEXTS ****
   const { deleteWorkout, workoutOptions } = useWorkout();
 
+  // **** HELPERS ****
+  const normalizedWorkoutDate = (new Date(workout.date).toLocaleDateString('en-US', { timeZone: 'UTC' }));
+  const normalizedToday = (new Date().toLocaleDateString('en-US', { timeZone: 'UTC' }))
 
   const findIconForWorkout = (workoutName: string) => {
     const workoutOption = workoutOptions.find(option => option.value === workoutName);
     return workoutOption ? workoutOption.icon : null;
   };
 
+  const workoutIcon = findIconForWorkout(workout.name);
+
+  // **** USE EFFECTS ****
   useEffect(() => {
     setOpen(expandAll);
   }, [expandAll]);
 
-  const workoutIcon = findIconForWorkout(workout.name);
-
+  
+  // **** RETURN LOGIC ****
   return (
     <Card className="mb-3" bg="light" text="dark" border={normalizedWorkoutDate > normalizedToday ? ("warning") : ("")}>
 

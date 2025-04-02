@@ -48,8 +48,8 @@ Follow these steps to get the project up and running on your local machine:
 - [x] Create a Git repository for the project
 - [x] Cards extend
 - [x] Edit functionality for cards
-- [ ] Edit functionality for table
-- [ ] Banner notifications on delete/create/edit
+- [x] Edit functionality for table
+- [x] Banner notifications on delete/create/edit
 - [ ] Search/filter functionality
 - [ ] More detail
 - [ ] Calendar view

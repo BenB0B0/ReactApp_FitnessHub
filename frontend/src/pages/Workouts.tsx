@@ -10,13 +10,13 @@ import { ArrowsAngleExpand, ArrowsAngleContract } from "react-bootstrap-icons";
 const ITEMS_PER_PAGE = import.meta.env.VITE_PAGINATION_MAX;
 
 const Workouts = () => {
-    // **** STATE CALLS ****
-    const { workouts, getWorkouts, isTableView, setIsTableView, isFormVisible, setIsFormVisible } = useWorkout();
+    // ***** STATES *****
     const [currentPage, setCurrentPage] = useState(1);
     const [expandAll, setExpandAll] = useState(false);
     const [selectedWorkout, setSelectedWorkout] = useState<Workout | undefined>(undefined);
-
-
+    // ***** CONTEXTS *****
+    const { workouts, getWorkouts, isTableView, setIsTableView, isFormVisible, setIsFormVisible } = useWorkout();
+    
     // **** PAGINATION CONTROLS **** <-- COMPONETIZE THIS LATER
     const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
     const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
@@ -25,11 +25,10 @@ const Workouts = () => {
     const goToNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
     const goToPrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
-    // **** EFFECT CALLS ****
+    // **** USE EFFECT CALLS ****
     useEffect(() => {
         getWorkouts();
     }, []);
-
 
     // **** HANDLE CALLS ****
     const toggleForm = () => {
@@ -40,7 +39,7 @@ const Workouts = () => {
         setIsTableView((prevState: boolean) => !prevState);
     };
 
-    // **** RETURN ****
+    // **** RETURN LOGIC ****
     return (
         <Container>
             <div className="mb-3 mt-3 d-flex align-items-center justify-content-between">
@@ -77,7 +76,10 @@ const Workouts = () => {
 
             {/* WORKOUT DATA SHOWN HERE */}
             {isTableView ? (
-                <WorkoutTable workouts={currentWorkouts} />
+                <WorkoutTable onEdit={(workout_) => {
+                    setSelectedWorkout(workout_);
+                    setIsFormVisible(true);
+                }} workouts={currentWorkouts} />
             ) : (
                 <Row>
                     {currentWorkouts.map((workout_) => (

@@ -5,3 +5,16 @@
 .hover-scale:hover {
     transform: scale(1.1) !important;
 }
+
+
+.custom-bordered-table td,
+.custom-bordered-table th {
+  border: 1px solid #787879;
+}
+
+.custom-bordered-table th:nth-child(5),
+.custom-bordered-table th:nth-child(6),
+.custom-bordered-table th:nth-child(7) {
+  border: none;
+  background-color: transparent;
+}

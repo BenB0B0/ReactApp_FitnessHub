@@ -3,9 +3,9 @@ import { Workout, WorkoutOption, workoutOptions } from "../types/workout";
 import * as workoutService from "../services/workoutService";
 import { useAuth } from "../context/AuthContext";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { useAlert } from "../context/AlertContext";
 
-
-// Define the context type
+// Workout Definition
 interface WorkoutContextType {
     isTableView: boolean;
     setIsTableView: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,23 +22,27 @@ interface WorkoutContextType {
     setWorkoutsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// Create the context with a default undefined value
+// Create Context
 const WorkoutContext = createContext<WorkoutContextType | undefined>(undefined);
 
 // Provider component
 export const WorkoutProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const { userId, isLoading } = useAuth(); // Get userId from AuthContext
-    const storedTableView = localStorage.getItem('isTableView') === 'true';
+     // **** CONTEXTS ****
+     const { userId, isLoading } = useAuth(); 
+     const storedTableView = localStorage.getItem('isTableView') === 'true';
+     const { showAlert } = useAlert();
+    // **** STATES ****
     const [isTableView, setIsTableView] = useState<boolean>(storedTableView || false);
     const [isFormVisible, setIsFormVisible] = useState<boolean>(false);
     const [workoutsLoading, setWorkoutsLoading] = useState<boolean>(true);
     const [workouts, setWorkouts] = useState<Workout[]>([]);
+   
 
     const sortWorkoutsByDate = (workouts: Workout[]) => {
         return workouts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     };
 
-    // Fetch workouts from backend
+    // Fetch workouts
     const getWorkouts = async () => {
         if (!userId) {
             console.error("User ID is not available.");
@@ -65,6 +69,8 @@ export const WorkoutProvider: React.FC<{ children: ReactNode }> = ({ children })
                 const updatedWorkouts = [addedWorkout, ...prevWorkouts]; 
                 return sortWorkoutsByDate(updatedWorkouts); 
             });
+
+            showAlert("Workout Added!", "success");
         } catch (error) {
             console.error(error);
         }
@@ -80,7 +86,10 @@ export const WorkoutProvider: React.FC<{ children: ReactNode }> = ({ children })
                   w.id === addedWorkout.id ? addedWorkout : w
                 );
                 return sortWorkoutsByDate(updatedWorkouts);
-              });
+            });
+
+            showAlert("Workout Edited!", "info");
+
         } catch (error) {
             console.error(error);
         }
@@ -91,21 +100,23 @@ export const WorkoutProvider: React.FC<{ children: ReactNode }> = ({ children })
         try {
             await workoutService.deleteWorkout(workoutId); 
             setWorkouts((prevWorkouts) => prevWorkouts.filter((workout) => workout.id !== workoutId));
+            showAlert("Workout Deleted!", "danger");
         } catch (error) {
             console.error(error);
         }
     };
 
+    // Store Table vs Card view in storage
     useEffect(() => {
         localStorage.setItem('isTableView', JSON.stringify(isTableView));
     }, [isTableView]);
 
-    // Fetch workouts when userId is available
+    // Fetch workouts only when userId is available
     useEffect(() => {
         if (userId) {
             getWorkouts(); 
         }
-    }, [userId]); // Dependency on userId
+    }, [userId]); 
 
     return (
         <WorkoutContext.Provider value={{ 
