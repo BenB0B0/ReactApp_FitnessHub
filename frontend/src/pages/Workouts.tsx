@@ -6,6 +6,7 @@ import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import { useWorkout } from "../context/WorkoutContext";
 import { Workout } from '../types/workout';
 import { ArrowsAngleExpand, ArrowsAngleContract } from "react-bootstrap-icons";
+import SearchFilter from "../components/SearchFilter";
 
 const ITEMS_PER_PAGE = import.meta.env.VITE_PAGINATION_MAX;
 
@@ -15,13 +16,13 @@ const Workouts = () => {
     const [expandAll, setExpandAll] = useState(false);
     const [selectedWorkout, setSelectedWorkout] = useState<Workout | undefined>(undefined);
     // ***** CONTEXTS *****
-    const { workouts, getWorkouts, isTableView, setIsTableView, isFormVisible, setIsFormVisible } = useWorkout();
+    const { getWorkouts, isTableView, setIsTableView, isFormVisible, setIsFormVisible, filteredWorkouts } = useWorkout();
     
     // **** PAGINATION CONTROLS **** <-- COMPONETIZE THIS LATER
     const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
     const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-    const currentWorkouts = workouts.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(workouts.length / ITEMS_PER_PAGE);
+    const currentWorkouts = filteredWorkouts.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredWorkouts.length / ITEMS_PER_PAGE);
     const goToNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
     const goToPrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
@@ -41,11 +42,15 @@ const Workouts = () => {
 
     // **** RETURN LOGIC ****
     return (
+        <>
         <Container>
             <div className="mb-3 mt-3 d-flex align-items-center justify-content-between">
-                <Button variant="warning" onClick={() => { toggleForm(); setSelectedWorkout(undefined); }} disabled={isFormVisible}>
+                <Button className="border border-dark" variant="warning" onClick={() => { toggleForm(); setSelectedWorkout(undefined); }} disabled={isFormVisible}>
                     Add Workout
                 </Button>
+                <SearchFilter />
+                
+                <span className="text-muted small ms-2">({filteredWorkouts.length})</span>
                 <div className="d-flex align-items-center ms-auto">
                     <Form>
                         <Form.Check
@@ -57,6 +62,7 @@ const Workouts = () => {
                             className="d-flex align-items-center"
                         />
                     </Form>
+                    
                     {!isTableView && (
                         <>
                             <span className="m-2"> | </span>
@@ -96,17 +102,18 @@ const Workouts = () => {
             )}
 
             {/* Pagination Controls */}
-            <div className="d-flex justify-content-center mt-3 ">
+            <div className="d-flex justify-content-center mt-3 mb-3">
                 <Button onClick={goToPrevPage} disabled={currentPage === 1}>
                     Prev
                 </Button>
-                <span className="mx-3 mt-1">Page {currentPage} of {totalPages}</span>
+                <span className="mx-3 mt-1">Page {currentPage} of {totalPages} </span>
                 <Button onClick={goToNextPage} disabled={currentPage === totalPages}>
                     Next
                 </Button>
             </div>
 
         </Container>
+        </>
     );
 };
 

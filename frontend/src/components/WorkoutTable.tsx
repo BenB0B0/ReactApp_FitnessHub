@@ -86,7 +86,7 @@ const WorkoutTables = ({ workouts, onEdit }: WorkoutsTableProps) => {
 
               {/* Edit */}
               <td className="text-center w-auto" style={{ width: 'auto', whiteSpace: 'nowrap', border: 'none' }}>
-                <Pencil href={workout_.url} target="_blank" className="text-warning hover-scale"
+                <Pencil target="_blank" className="text-warning hover-scale"
                   onClick={(e) => {
                     e.stopPropagation();
                     onEdit(workout_);

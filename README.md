@@ -45,15 +45,16 @@ Follow these steps to get the project up and running on your local machine:
 
 ## Todos
 1. WORKOUT PAGE:
-- [x] Create a Git repository for the project
-- [x] Cards extend
-- [x] Edit functionality for cards
-- [x] Edit functionality for table
+- [x] Auth0 Flow
+- [x] Workout Model/Services (create, update, delete)
+- [x] Table and Cards views
+- [x] Cards collapse ui
+- [x] Edit functionality
 - [x] Banner notifications on delete/create/edit
-- [ ] Search/filter functionality
-- [ ] More detail
+- [x] Search/filter functionality
+- [ ] More details (notes, steps)
 - [ ] Calendar view
-- [ ] Export to excel/csv
+- [x] Export to excel/csv
 2. OTHER PAGES:
 - [ ] Routines  / Workout planner page
 - [ ] Stats page

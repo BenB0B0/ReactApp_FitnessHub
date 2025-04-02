@@ -20,6 +20,9 @@ interface WorkoutContextType {
     setIsFormVisible: React.Dispatch<React.SetStateAction<boolean>>;
     workoutsLoading: boolean;
     setWorkoutsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    filteredWorkouts: Workout[];
+    searchTerm: string;
+    setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
 }
 
 // Create Context
@@ -36,7 +39,15 @@ export const WorkoutProvider: React.FC<{ children: ReactNode }> = ({ children })
     const [isFormVisible, setIsFormVisible] = useState<boolean>(false);
     const [workoutsLoading, setWorkoutsLoading] = useState<boolean>(true);
     const [workouts, setWorkouts] = useState<Workout[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
    
+
+    // HELPERS
+    const filteredWorkouts = workouts.filter((w) =>
+        `${w.name} ${w.date} ${w.distance} ${w.time_length}`
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
+    );
 
     const sortWorkoutsByDate = (workouts: Workout[]) => {
         return workouts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -132,7 +143,10 @@ export const WorkoutProvider: React.FC<{ children: ReactNode }> = ({ children })
             isFormVisible,
             setIsFormVisible,
             workoutsLoading,
-            setWorkoutsLoading
+            setWorkoutsLoading,
+            filteredWorkouts,
+            searchTerm,
+            setSearchTerm
         }}>
             {isLoading ? <LoadingSpinner /> : children} {/* Show loading state */}
         </WorkoutContext.Provider>
