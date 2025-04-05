@@ -52,17 +52,17 @@ Follow these steps to get the project up and running on your local machine:
 - [x] Edit functionality
 - [x] Banner notifications on delete/create/edit
 - [x] Search/filter functionality
-- [ ] More details (notes, steps)
-- [ ] Calendar view
+- [x] Calendar view (colored by cardio/strength/mix)
 - [x] Export to excel/csv
+- [ ] Notes (notes)
 2. OTHER PAGES:
-- [ ] Routines  / Workout planner page
+- [ ] Routines / Workout planner page
 - [ ] Stats page
 - [ ] Home/splash/welcome screen
 3. AI:
 - [ ] Create an AI helper to assist with task management
 4. OUTSIDE SOURCES:
-- [ ] Strava API
+- [ ] Strava API (routes, heartrate, calories, steps)
 5. PIPELINE:
 - [ ] Dockerize the application
 - [ ] Set up CI/CD flow through Azure

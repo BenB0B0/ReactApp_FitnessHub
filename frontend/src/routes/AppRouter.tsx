@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import Workouts from "../pages/Workouts";
 import AIPlanner from "../pages/AIPlanner";
+import Calendar from "../pages/Calendar";
 import Splash from "../pages/Splash";
 import NavBar from "../components/NavBar";
 import ProtectedRoute from "../routes/ProtectedRoutes";
@@ -17,6 +18,7 @@ export default function AppRouter() {
         <Route path="/" element={ <ProtectedRoute> <Home /> </ProtectedRoute> } />
         <Route path="/workouts" element={<ProtectedRoute> <Workouts /> </ProtectedRoute>} />
         <Route path="/ai-planner" element={<ProtectedRoute> <AIPlanner /> </ProtectedRoute>} />
+        <Route path="/calendar" element={<ProtectedRoute> <Calendar /> </ProtectedRoute>} />
         <Route path="/splash" element={<Splash />} />
       </Routes>
       </WorkoutProvider>

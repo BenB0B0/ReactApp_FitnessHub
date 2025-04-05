@@ -1,10 +1,11 @@
-import { Table } from 'react-bootstrap';
+import { Table, Badge } from 'react-bootstrap';
 import { CSVLink } from "react-csv";
 import { Trash, Youtube, Signpost, Clock, Calendar2Check, Pencil, FiletypeCsv } from "react-bootstrap-icons";
 import { Workout } from '../types/workout';
 import { useWorkout } from "../context/WorkoutContext";
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { isAfter, startOfToday } from 'date-fns';
 
 interface WorkoutsTableProps {
   workouts: Workout[];
@@ -57,6 +58,9 @@ const WorkoutTables = ({ workouts, onEdit }: WorkoutsTableProps) => {
               <td>
                 <div className="d-flex align-items-center">
                   <FontAwesomeIcon icon={findIconForWorkout(workout_.name)} className="me-2" /><span>{workout_.name}</span>
+                  {isAfter(workout_.date, startOfToday()) &&
+                    <Badge className='ms-2' pill bg="success" text="white"> Upcoming</Badge>
+                  }
                 </div>
               </td>
 

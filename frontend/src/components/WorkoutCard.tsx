@@ -4,6 +4,7 @@ import { Trash, Youtube, Calendar2Check, Clock, Signpost, Activity } from "react
 import { Workout } from '../types/workout';
 import { useWorkout } from "../context/WorkoutContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { isAfter, startOfToday } from 'date-fns';
 
 interface WorkoutsCardProps {
   workout: Workout;
@@ -17,10 +18,7 @@ const WorkoutCard = ({ workout, expandAll, onEdit }: WorkoutsCardProps) => {
   // **** CONTEXTS ****
   const { deleteWorkout, workoutOptions } = useWorkout();
 
-  // **** HELPERS ****
-  const normalizedWorkoutDate = (new Date(workout.date).toLocaleDateString('en-US', { timeZone: 'UTC' }));
-  const normalizedToday = (new Date().toLocaleDateString('en-US', { timeZone: 'UTC' }))
-
+  // **** HELPERS ****  
   const findIconForWorkout = (workoutName: string) => {
     const workoutOption = workoutOptions.find(option => option.value === workoutName);
     return workoutOption ? workoutOption.icon : null;
@@ -33,10 +31,16 @@ const WorkoutCard = ({ workout, expandAll, onEdit }: WorkoutsCardProps) => {
     setOpen(expandAll);
   }, [expandAll]);
 
+  useEffect(() => {
+    if (isAfter(workout.date, startOfToday())){
+      setOpen(prev => !prev);
+    }
+  },[]);
+
   
   // **** RETURN LOGIC ****
   return (
-    <Card className="mb-3" bg="light" text="dark" border={normalizedWorkoutDate > normalizedToday ? ("warning") : ("")}>
+    <Card className="mb-3" bg="light" text="dark" border={isAfter(workout.date, startOfToday()) ? ("warning") : ("")}>
 
       <Card.Header
         className="bg-dark text-white"

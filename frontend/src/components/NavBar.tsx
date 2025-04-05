@@ -25,6 +25,7 @@ function NavBar() {
             <Nav className="me-auto">
               <Nav.Link as={Link} to="/">Home</Nav.Link>
               <Nav.Link as={Link} to="/workouts">Workouts</Nav.Link>
+              <Nav.Link as={Link} to="/calendar">Calendar</Nav.Link>
               <Nav.Link as={Link} to="/ai-planner">AI Planner</Nav.Link>
             </Nav>
           }

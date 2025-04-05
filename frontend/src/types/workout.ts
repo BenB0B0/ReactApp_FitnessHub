@@ -19,20 +19,21 @@ export interface WorkoutOption {
     icon: IconDefinition;
     distance_req: boolean;
     url_req: boolean;
+    cardio: boolean;
 }
 
 export const workoutOptions: WorkoutOption[] = [
-    { value: "Run", label: "Run", icon: Icons.faPersonRunning, distance_req:true, url_req: false},
-    { value: "Walk", label: "Walk", icon: Icons.faPersonWalking, distance_req:true, url_req: false  },
-    { value: "Upperbody Lift", label: "Upperbody Lift", icon: Icons.faDumbbell, distance_req:false, url_req: true },
-    { value: "Lowerbody Lift", label: "Lowerbody Lift", icon: Icons.faDumbbell, distance_req:false, url_req: true },
-    { value: "Fullbody Lift", label: "Fullbody Lift", icon: Icons.faDumbbell, distance_req:false, url_req: true },
-    { value: "HIIT", label: "HIIT", icon: Icons.faFireAlt, distance_req:false, url_req: true },
-    { value: "Basketball", label: "Basketball", icon: Icons.faBasketball, distance_req:false, url_req: false },
-    { value: "Yoga", label: "Yoga", icon: Icons.faSpa, distance_req:false, url_req: true },
-    { value: "Swim", label: "Swim", icon: Icons.faSwimmer, distance_req:true, url_req: false  },
-    { value: "Ski", label: "Ski", icon: Icons.faSkiing, distance_req:true, url_req: false  },
-    { value: "Hike", label: "Hike", icon: Icons.faHiking, distance_req:true, url_req: false  },
-    { value: "Bike", label: "Bike", icon: Icons.faBiking, distance_req:true, url_req: false  },
-    { value: "Pickle Ball", label: "Pickle Ball", icon: Icons.faTableTennisPaddleBall, distance_req:false, url_req: false },
+    { value: "Run", label: "Run", icon: Icons.faPersonRunning, distance_req:true, url_req: false, cardio:true},
+    { value: "Walk", label: "Walk", icon: Icons.faPersonWalking, distance_req:true, url_req: false, cardio:true },
+    { value: "Upperbody Lift", label: "Upperbody Lift", icon: Icons.faDumbbell, distance_req:false, url_req: true, cardio:false },
+    { value: "Lowerbody Lift", label: "Lowerbody Lift", icon: Icons.faDumbbell, distance_req:false, url_req: true, cardio:false },
+    { value: "Fullbody Lift", label: "Fullbody Lift", icon: Icons.faDumbbell, distance_req:false, url_req: true, cardio:false },
+    { value: "HIIT", label: "HIIT", icon: Icons.faFireAlt, distance_req:false, url_req: true, cardio:true },
+    { value: "Basketball", label: "Basketball", icon: Icons.faBasketball, distance_req:false, url_req: false, cardio:true },
+    { value: "Yoga", label: "Yoga", icon: Icons.faSpa, distance_req:false, url_req: true, cardio:true },
+    { value: "Swim", label: "Swim", icon: Icons.faSwimmer, distance_req:true, url_req: false, cardio:true },
+    { value: "Ski", label: "Ski", icon: Icons.faSkiing, distance_req:true, url_req: false, cardio:true },
+    { value: "Hike", label: "Hike", icon: Icons.faHiking, distance_req:true, url_req: false, cardio:true },
+    { value: "Bike", label: "Bike", icon: Icons.faBiking, distance_req:true, url_req: false, cardio:true },
+    { value: "Pickle Ball", label: "Pickle Ball", icon: Icons.faTableTennisPaddleBall, distance_req:false, url_req: false, cardio:true },
 ].sort((a, b) => a.label.localeCompare(b.label));

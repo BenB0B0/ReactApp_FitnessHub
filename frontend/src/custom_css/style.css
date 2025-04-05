@@ -18,3 +18,18 @@
   border: none;
   background-color: transparent;
 }
+
+.rbc-month-view .rbc-day-bg {
+  transition: transform 0.2s ease;
+}
+
+.rbc-month-view .rbc-day-bg:hover {
+  transform: scale(1.03);
+  cursor: pointer;
+  z-index: 2;
+  background-color: rgba(255, 193, 7, 0.1);
+}
+
+.rbc-month-view .rbc-day-bg {
+  will-change: transform;
+}
