@@ -5,6 +5,15 @@
 .hover-scale:hover {
     transform: scale(1.1) !important;
 }
+.hover-no-scale {
+  cursor: pointer;
+}
+.hover-no-scale:hover {
+  transform: scale(1.01);
+  cursor: pointer;
+  color: #ffc107;
+}
+
 
 
 .custom-bordered-table td,

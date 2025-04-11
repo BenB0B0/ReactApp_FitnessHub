@@ -1,6 +1,6 @@
 import { Table, Badge } from 'react-bootstrap';
 import { CSVLink } from "react-csv";
-import { Trash, Youtube, Signpost, Clock, Calendar2Check, Pencil, FiletypeCsv } from "react-bootstrap-icons";
+import { Trash, Youtube, Signpost, Clock, Calendar2Check, FileEarmarkRuled, FiletypeCsv, Fire } from "react-bootstrap-icons";
 import { Workout } from '../types/workout';
 import { useWorkout } from "../context/WorkoutContext";
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
@@ -55,12 +55,14 @@ const WorkoutTables = ({ workouts, onEdit }: WorkoutsTableProps) => {
           {workouts.map((workout_) => (
             <tr key={workout_.id}>
               {/* Name with Video Icon Link */}
-              <td>
+              <td className="hover-no-scale" onClick={(e) => {e.stopPropagation();onEdit(workout_);}}>
                 <div className="d-flex align-items-center">
                   <FontAwesomeIcon icon={findIconForWorkout(workout_.name)} className="me-2" /><span>{workout_.name}</span>
                   {isAfter(workout_.date, startOfToday()) &&
                     <Badge className='ms-2' pill bg="success" text="white"> Upcoming</Badge>
                   }
+                  {workout_.note && <small><FileEarmarkRuled className='ms-2 text-warning'/></small>}
+                  {workout_.intensity === "High" && (<small><Fire className="ms-2 text-warning" /></small>)}
                 </div>
               </td>
 
@@ -86,16 +88,6 @@ const WorkoutTables = ({ workouts, onEdit }: WorkoutsTableProps) => {
                 {workout_.url && (
                   <Youtube href={workout_.url} target="_blank" size={24} className="text-warning hover-scale" />
                 )}
-              </td>
-
-              {/* Edit */}
-              <td className="text-center w-auto" style={{ width: 'auto', whiteSpace: 'nowrap', border: 'none' }}>
-                <Pencil target="_blank" className="text-warning hover-scale"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onEdit(workout_);
-                  }}
-                />
               </td>
 
               {/* Delete */}

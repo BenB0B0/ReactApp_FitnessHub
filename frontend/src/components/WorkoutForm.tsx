@@ -3,7 +3,7 @@ import { Workout } from '../types/workout';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useWorkout } from "../context/WorkoutContext";
 import { useAuth } from "../context/AuthContext";
-import { PinMap, Stopwatch, Youtube, Calendar } from "react-bootstrap-icons";
+import { PinMap, Stopwatch, Youtube, Calendar, FileEarmarkRuled, Fire } from "react-bootstrap-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 
@@ -23,7 +23,9 @@ const WorkoutsForm: React.FC<WorkoutsFormProps> = ({ initialFormData }) => {
         distance: 0,
         url: '',
         date: new Date().toISOString().split('T')[0],
-        id: ''
+        id: '',
+        note: '',
+        intensity: 'Medium'
     });
 
     // ***** CONTEXTS *****
@@ -40,7 +42,9 @@ const WorkoutsForm: React.FC<WorkoutsFormProps> = ({ initialFormData }) => {
                 distance: initialFormData.distance ?? 0,
                 url: initialFormData.url ?? '',
                 date: initialFormData.date ? new Date(initialFormData.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-                id: initialFormData.id ?? ''
+                id: initialFormData.id ?? '',
+                note: initialFormData.note ?? '',
+                intensity: initialFormData.intensity ?? ''
             });
         }
     }, [initialFormData]);
@@ -80,12 +84,14 @@ const WorkoutsForm: React.FC<WorkoutsFormProps> = ({ initialFormData }) => {
             distance: formData.distance,
             url: formData.url,
             date: formData.date,
-            id: formData.id
+            id: formData.id,
+            note: formData.note,
+            intensity: formData.intensity
         };
 
         if (editing) {
             editWorkout(newWorkout);
-            
+
         } else {
             addWorkout(newWorkout);
         }
@@ -144,6 +150,20 @@ const WorkoutsForm: React.FC<WorkoutsFormProps> = ({ initialFormData }) => {
                                 <Form.Control name="date" type="date"
                                     value={formData.date}
                                     onChange={handleChange} required />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="exampleForm.ControlSelect1">
+                                <Fire className="me-2"/>
+                                <Form.Label><small className="form-text text-muted">Intensity</small></Form.Label>
+                                <Form.Select name="intensity" value={formData.intensity} onChange={handleChange} required>
+                                    <option key="Low" value="Low">Low</option>
+                                    <option key="Medium" value="Medium">Medium</option>
+                                    <option key="High" value="High">High</option>
+                                </Form.Select>
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                                <FileEarmarkRuled className="me-2" />
+                                <Form.Label><small className="form-text text-muted">Notes</small></Form.Label>
+                                <Form.Control name="note" type="text" value={formData.note} onChange={handleChange} as="textarea" />
                             </Form.Group>
                         </>}
                     </Form>

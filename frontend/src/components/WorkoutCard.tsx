@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, Button, ListGroup, Collapse } from "react-bootstrap";
-import { Trash, Youtube, Calendar2Check, Clock, Signpost, Activity } from "react-bootstrap-icons";
+import { Trash, Youtube, Calendar2Check, Clock, Signpost, Activity, FileEarmarkRuled, Fire } from "react-bootstrap-icons";
 import { Workout } from '../types/workout';
 import { useWorkout } from "../context/WorkoutContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -32,12 +32,12 @@ const WorkoutCard = ({ workout, expandAll, onEdit }: WorkoutsCardProps) => {
   }, [expandAll]);
 
   useEffect(() => {
-    if (isAfter(workout.date, startOfToday())){
+    if (isAfter(workout.date, startOfToday())) {
       setOpen(prev => !prev);
     }
-  },[]);
+  }, []);
 
-  
+
   // **** RETURN LOGIC ****
   return (
     <Card className="mb-3" bg="light" text="dark" border={isAfter(workout.date, startOfToday()) ? ("warning") : ("")}>
@@ -65,7 +65,7 @@ const WorkoutCard = ({ workout, expandAll, onEdit }: WorkoutsCardProps) => {
             <span>{workout.name}</span>
           </div>
           {/* Right side: date */}
-          <div className="d-flex align-items-center ms-auto small text-secondary">
+          <div className={`d-flex align-items-center ms-auto small ${isAfter(workout.date, startOfToday()) ? 'text-white' : 'text-secondary'}`}>
             <span>{new Date(workout.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</span>
           </div>
         </div>
@@ -73,14 +73,14 @@ const WorkoutCard = ({ workout, expandAll, onEdit }: WorkoutsCardProps) => {
 
       <Collapse in={open}>
         <div>
-          <Card.Body className="bg-secondary text-white p-2" >
+          <Card.Body className="bg-secondary text-white p-2 position-relative" >
             <ListGroup.Item>
               {/* Date with Icon and YouTube icon on the same row */}
               <div className="d-flex justify-content-between align-items-center mb-2">
-              <div className="d-flex align-items-center">
-              <Calendar2Check className="me-2" />
-              <span>{new Date(workout.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</span>
-            </div>
+                <div className="d-flex align-items-center">
+                  <Calendar2Check className="me-2" />
+                  <span>{new Date(workout.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</span>
+                </div>
                 {/* YouTube Link aligned to the right */}
                 {workout.url && (
                   <Card.Link href={workout.url} target="_blank" className="text-warning">
@@ -108,13 +108,26 @@ const WorkoutCard = ({ workout, expandAll, onEdit }: WorkoutsCardProps) => {
                   <span className="ms-2">{workout.time_length} Minutes</span>
                 </div>) : ("")}
 
+              {/* Notes */}
+              {workout.note && <div className="d-flex align-items-center">
+                <small><FileEarmarkRuled /></small>
+                <span className="ms-2"><small>{workout.note}</small></span>
+              </div>}
+
+              {/* Intensity */}
+              {(workout.intensity === "Medium" || workout.intensity === "High") && (
+              <div className="position-absolute bottom-0 end-0">
+                <small>
+                  <Fire className={workout.intensity === "High" ? "text-warning" : "text-white"}/>
+                </small>
+              </div>)}
 
             </ListGroup.Item>
           </Card.Body>
 
           {/* Delete Button */}
           <div className="d-flex justify-content-end p-2">
-            <Button type="button" form="workoutForm" variant="outline-danger" 
+            <Button type="button" form="workoutForm" variant="outline-danger"
               onClick={() => {
                 if (window.confirm("Are you sure you want to delete this workout?")) {
                   deleteWorkout(workout.id);

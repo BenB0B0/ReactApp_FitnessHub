@@ -33,7 +33,9 @@ def create_workout():
                 time_length=data['time_length'],
                 distance=data['distance'],
                 url=data['url'],
-                date=workout_date
+                date=workout_date,
+                note=data['note'],
+                intensity=data['intensity']
             )
     db.session.add(new_workout)
     db.session.commit()
@@ -62,6 +64,8 @@ def update_workout(workout_id):
     workout.distance = data.get('distance', workout.distance)
     workout.url = data.get('url', workout.url)
     workout.user_id = data.get('user_id', workout.user_id)
+    workout.note = data.get('note', workout.note)
+    workout.intensity = data.get('intensity', workout.intensity)
 
     db.session.commit()
 
@@ -81,7 +85,9 @@ def get_workouts():
             'time_length': workout.time_length,
             'distance': workout.distance,
             'url': workout.url,
-            'date': workout.date
+            'date': workout.date,
+            'note': workout.note,
+            'intensity': workout.intensity
         } for workout in workouts
     ]
     return jsonify(workout_list)

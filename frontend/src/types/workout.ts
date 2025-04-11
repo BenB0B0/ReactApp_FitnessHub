@@ -9,7 +9,9 @@ export interface Workout {
     distance: number,
     url: string,
     date: string,
-    id: string
+    id: string,
+    note: string,
+    intensity: string
 }
 
 // --------- WORKOUT OPTION TYPES ---------

@@ -9,6 +9,8 @@ class Workout(db.Model):
     distance = db.Column(db.Float)
     url = db.Column(db.String(10000))
     date = db.Column(db.Date, default=func.current_date())
+    note = db.Column(db.String(10000))
+    intensity = db.Column(db.String(100))
     user_id = db.Column(db.String, db.ForeignKey('user.id'))
 
 class User(db.Model):
