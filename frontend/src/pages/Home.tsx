@@ -5,9 +5,11 @@ import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { isAfter, startOfToday } from 'date-fns';
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const Home = () => {
-    const { workouts, workoutOptions, setIsFormVisible } = useWorkout();
+    const { workouts, workoutOptions, workoutsLoading, setIsFormVisible } = useWorkout();
     const navigate = useNavigate();
     const { user } = useAuth();
     const lastWorkout = workouts.length > 0 ? workouts[0] : null;
@@ -28,7 +30,7 @@ const Home = () => {
                         <Card className="text-start shadow hover-scale" onClick={() => navigate("/workouts")}>
                             <Card.Body>
                                 <h5 className="mb-3"> <Lightning className="me-2 text-warning" />
-                                    Last Workout
+                                    {isAfter(lastWorkout.date, startOfToday()) ? ("Upcoming Workout") : ("Last Workout")}
                                 </h5>
                                 <p className="mb-1 d-flex align-items-center">
                                     <FontAwesomeIcon className="me-2" icon={findIconForWorkout(lastWorkout.name)} />
@@ -54,7 +56,9 @@ const Home = () => {
                             </Card.Body>
                         </Card>
                     ) : (
-                        <p className="text-muted">No workouts yet. Let's get started!</p>
+                        <p className="text-muted">
+                        {workoutsLoading ? (<LoadingSpinner/>) : ("No workouts yet. Let's get started!")}
+                        </p>
                     )}
                 </Col>
             </Row>

@@ -1,3 +1,4 @@
+/* HOVER EFFECTS */
 .hover-scale {
     cursor: pointer;
     transition: transform 0.2s ease, color 0.2s ease;
@@ -15,7 +16,7 @@
 }
 
 
-
+/* CUSTOM TABLE STYLES */
 .custom-bordered-table td,
 .custom-bordered-table th {
   border: 1px solid #787879;
@@ -28,6 +29,7 @@
   background-color: transparent;
 }
 
+/* CALENDAR */
 .rbc-month-view .rbc-day-bg {
   transition: transform 0.2s ease;
 }
@@ -41,4 +43,12 @@
 
 .rbc-month-view .rbc-day-bg {
   will-change: transform;
+}
+
+/* ACCORDION */ 
+.accordion {
+	--bs-accordion-btn-color: black;
+	--bs-accordion-btn-bg: lightgrey;
+	--bs-accordion-active-color: black;
+	--bs-accordion-active-bg: #ffc107;
 }

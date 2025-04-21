@@ -56,16 +56,16 @@ Follow these steps to get the project up and running on your local machine:
 - [x] Export to excel/csv
 - [x] Notes (notes)
 2. OTHER PAGES:
-- [ ] Routines Page
+- [ ] Routines Page (delete -> edit -> equipment -> relationship to workout)
 - [x] Stats page
 3. DB:
 - [ ] Upgrade from SQL Alch
-3. AI:
-- [ ] Create an AI helper to assist with task management
 4. PIPELINE:
 - [ ] Dockerize the application
 - [ ] Set up CI/CD flow through Azure
-5. OUTSIDE SOURCES:
+5. AI:
+- [ ] Create an AI helper to assist with task management
+6. OUTSIDE SOURCES:
 - [ ] Strava API (routes, heartrate, calories, steps)
 
 ## CI/CD with Azure

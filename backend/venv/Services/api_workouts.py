@@ -1,11 +1,11 @@
 from flask import jsonify, request, Blueprint
-import json
-from Services.models import Workout
+from Services.models import Workout, WorkoutRoutine, RoutineStep
 from datetime import datetime
 from . import db
 
 workouts_bp = Blueprint('workouts', __name__)
 
+# ---------------------------------- DELETE WORKOUT ------------------------------------#
 @workouts_bp.route('/api/delete-workout/<int:id>', methods=['DELETE'])
 def delete_workout(id):
     print("ID Deleted: ",id)
@@ -17,7 +17,7 @@ def delete_workout(id):
     else:
         return jsonify({'message': 'Workout not found!'}), 404
 
-
+# ---------------------------------- CREATE WORKOUT ------------------------------------#
 @workouts_bp.route('/api/workouts', methods=['POST'])
 def create_workout():
     data = request.json
@@ -44,7 +44,7 @@ def create_workout():
     print("Workout Added: ", data)
     return jsonify(data), 201
 
-
+# ---------------------------------- UPDATE WORKOUT ------------------------------------#
 @workouts_bp.route('/api/workouts/<int:workout_id>', methods=['PUT'])
 def update_workout(workout_id):
     data = request.json
@@ -72,7 +72,7 @@ def update_workout(workout_id):
     return jsonify(data), 201
 
 
-
+# ---------------------------------- GET WORKOUTS ------------------------------------#
 @workouts_bp.route('/api/workouts', methods=['GET'])
 def get_workouts():
     workouts = Workout.query.filter_by(user_id = request.args.get('userId'))
@@ -91,3 +91,93 @@ def get_workouts():
         } for workout in workouts
     ]
     return jsonify(workout_list)
+
+
+# ---------------------------------- GET ROUTINES ------------------------------------#
+@workouts_bp.route('/api/routines', methods=['GET'])
+def get_routines():
+    user_id = request.args.get('userId')
+    routines = WorkoutRoutine.query.filter_by(user_id=user_id).all()
+
+    routines_data = []
+    for routine in routines:
+        routine_data = {
+            'id': routine.id,
+            'name': routine.name,
+            'note': routine.note,
+            'steps': [
+                {
+                    'id': step.id,
+                    'exercise': step.exercise,
+                    'reps': step.reps,
+                    'sets': step.sets,
+                    'weight': step.weight,
+                    'order': step.order
+                } for step in sorted(routine.steps, key=lambda s: s.order)
+            ]
+        }
+        routines_data.append(routine_data)
+
+    return jsonify(routines_data)
+
+# ---------------------------------- CREATE ROUTINES ------------------------------------#
+@workouts_bp.route('/api/routines', methods=['POST'])
+def create_routine():
+    data = request.json
+    routine = WorkoutRoutine(
+        name=data.get('name'),
+        note=data.get('note'),
+        user_id=data.get('user_id')
+    )
+
+    for step_data in data.get('steps', []):
+        step = RoutineStep(
+            exercise=step_data['exercise'],
+            reps=step_data['reps'],
+            sets=step_data['sets'],
+            weight=step_data['weight'],
+            order=step_data['order']
+        )
+        routine.steps.append(step)
+
+    db.session.add(routine)
+    db.session.commit()
+
+    return jsonify(data), 201
+
+
+# ---------------------------------- UPDATE ROUTINES ------------------------------------#
+@workouts_bp.route('/api/routines/<int:routine_id>', methods=['PUT'])
+def update_routine(routine_id):
+    data = request.json
+    routine = WorkoutRoutine.query.get_or_404(routine_id)
+
+    routine.name = data.get('name', routine.name)
+    routine.note = data.get('note', routine.note)
+
+    # Clear old steps
+    RoutineStep.query.filter_by(routine_id=routine.id).delete()
+
+    # Add updated steps
+    for step_data in data.get('steps', []):
+        step = RoutineStep(
+            routine_id=routine.id,
+            exercise=step_data['exercise'],
+            reps=step_data['reps'],
+            sets=step_data['sets'],
+            weight=step_data['weight'],
+            order=step_data['order']
+        )
+        db.session.add(step)
+
+    db.session.commit()
+    return jsonify(data)
+
+
+# ---------------------------------- DELETE ROUTINES ------------------------------------#
+@workouts_bp.route('/api/routines/<int:routine_id>', methods=['DELETE'])
+def delete_routine(routine_id):
+    routine = WorkoutRoutine.query.get_or_404(routine_id)
+    db.session.delete(routine)
+    db.session.commit()
+    return jsonify({'message': 'Routine deleted'})

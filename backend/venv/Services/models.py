@@ -13,6 +13,22 @@ class Workout(db.Model):
     intensity = db.Column(db.String(100))
     user_id = db.Column(db.String, db.ForeignKey('user.id'))
 
+class WorkoutRoutine(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+    note = db.Column(db.Text)
+    steps = db.relationship('RoutineStep', backref='routine', cascade='all, delete-orphan')
+    user_id = db.Column(db.String, db.ForeignKey('user.id'))
+
+class RoutineStep(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    routine_id = db.Column(db.Integer, db.ForeignKey('workout_routine.id'))
+    exercise = db.Column(db.String(100))
+    reps = db.Column(db.Integer)
+    sets = db.Column(db.Integer)
+    weight = db.Column(db.String(50))
+    order = db.Column(db.Integer)
+
 class User(db.Model):
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     email = db.Column(db.String(120), unique=True, nullable=False)

@@ -16,7 +16,7 @@ const Workouts = () => {
     const [expandAll, setExpandAll] = useState(false);
     const [selectedWorkout, setSelectedWorkout] = useState<Workout | undefined>(undefined);
     // ***** CONTEXTS *****
-    const { getWorkouts, isTableView, setIsTableView, isFormVisible, setIsFormVisible, filteredWorkouts } = useWorkout();
+    const { getWorkouts, isTableView, setIsTableView, isFormVisible, setIsFormVisible, filteredWorkouts, searchTerm, setSearchTerm } = useWorkout();
 
     // **** PAGINATION CONTROLS **** <-- COMPONETIZE THIS LATER
     const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
@@ -59,10 +59,10 @@ const Workouts = () => {
         <>
             <Container>
                 <div className="mb-3 mt-3 d-flex align-items-center justify-content-between">
-                    <Button className="border border-dark" variant="warning" onClick={() => { toggleForm(); setSelectedWorkout(undefined); }} disabled={isFormVisible}>
-                        Add Workout
+                    <Button variant="outline-primary" onClick={() => { toggleForm(); setSelectedWorkout(undefined); }} disabled={isFormVisible}>
+                        + Add Workout
                     </Button>
-                    <SearchFilter />
+                    <SearchFilter searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
                     <span className="text-muted small ms-2">({filteredWorkouts.length})</span>
                     <div className="d-flex align-items-center ms-auto">
