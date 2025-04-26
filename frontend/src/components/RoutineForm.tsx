@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
-import { Routine, RoutineStep } from '../types/routine';
+import { Routine, RoutineStep, Equipment } from '../types/routine';
 import { useRoutine } from '../context/RoutineContext';
 import { useAuth } from '../context/AuthContext';
 import { faListCheck, faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import EquipmentInput from '../components/EquipmentInput';
 
 type RoutineFormProps = {
     initialFormData?: Routine;
@@ -19,9 +20,15 @@ const defaultStep: RoutineStep = {
     order: 1
 };
 
+const defaultEq: Equipment = {
+    name: ''
+};
+
 const RoutineForm: React.FC<RoutineFormProps> = ({ initialFormData, onClose }) => {
     const { userId } = useAuth();
-    const { addRoutine, editRoutine } = useRoutine();
+    const { addRoutine, editRoutine, category } = useRoutine();
+    const [equipment, setEquipment] = useState<string[]>([]);
+
 
     const [editing, setEditing] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -29,16 +36,26 @@ const RoutineForm: React.FC<RoutineFormProps> = ({ initialFormData, onClose }) =
         id: '',
         name: '',
         note: '',
+        category: '',
         user_id: userId ?? '',
-        steps: [{ ...defaultStep }]
+        steps: [{ ...defaultStep }],
+        equipment: [{ ...defaultEq }]
     });
 
     useEffect(() => {
         if (initialFormData) {
             setEditing(true);
             setFormData(initialFormData);
+            setEquipment(initialFormData.equipment.map(eq => eq.name));
         }
     }, [initialFormData]);
+
+    const handleStepKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); 
+            addStep();       
+        }
+    };
 
     const handleStepChange = (index: number, field: keyof RoutineStep, value: any) => {
         const updatedSteps = [...formData.steps];
@@ -66,7 +83,7 @@ const RoutineForm: React.FC<RoutineFormProps> = ({ initialFormData, onClose }) =
         setFormData({ ...formData, steps: updated });
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
@@ -79,6 +96,7 @@ const RoutineForm: React.FC<RoutineFormProps> = ({ initialFormData, onClose }) =
 
         const payload: Routine = {
             ...formData,
+            equipment: equipment.map(e => ({ name: e })),
             user_id: userId
         };
 
@@ -114,7 +132,7 @@ const RoutineForm: React.FC<RoutineFormProps> = ({ initialFormData, onClose }) =
                         />
                     </Form.Group>
 
-                    <Form.Group className="mb-4">
+                    <Form.Group className="mb-3">
                         <Form.Label>Note</Form.Label>
                         <Form.Control
                             as="textarea"
@@ -124,7 +142,21 @@ const RoutineForm: React.FC<RoutineFormProps> = ({ initialFormData, onClose }) =
                         />
                     </Form.Group>
 
-                    <h5>Steps</h5>
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlSelect1">
+                        <Form.Label>Category</Form.Label>
+                        <Form.Select name="category" value={formData.category} onChange={handleChange} required>
+                            <option value="">Select a category</option>
+                            {category.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                    {option.label}
+                                </option>
+                            ))}
+                        </Form.Select>
+                    </Form.Group>
+
+                    <EquipmentInput equipment={equipment} setEquipment={setEquipment} />
+                    
+                    <h3>Steps</h3>
                     {formData.steps.map((step, index) => (
                         <Row key={index} className="mb-3 align-items-end">
                             <Col md={3}>
@@ -133,6 +165,7 @@ const RoutineForm: React.FC<RoutineFormProps> = ({ initialFormData, onClose }) =
                                     type="text"
                                     value={step.exercise}
                                     onChange={(e) => handleStepChange(index, 'exercise', e.target.value)}
+                                    onKeyDown={handleStepKeyDown}
                                     required
                                 />
                             </Col>
@@ -142,6 +175,7 @@ const RoutineForm: React.FC<RoutineFormProps> = ({ initialFormData, onClose }) =
                                     type="number"
                                     value={step.reps}
                                     onChange={(e) => handleStepChange(index, 'reps', e.target.value)}
+                                    onKeyDown={handleStepKeyDown}
                                     required
                                 />
                             </Col>
@@ -151,6 +185,7 @@ const RoutineForm: React.FC<RoutineFormProps> = ({ initialFormData, onClose }) =
                                     type="number"
                                     value={step.sets}
                                     onChange={(e) => handleStepChange(index, 'sets', e.target.value)}
+                                    onKeyDown={handleStepKeyDown}
                                     required
                                 />
                             </Col>
@@ -160,6 +195,7 @@ const RoutineForm: React.FC<RoutineFormProps> = ({ initialFormData, onClose }) =
                                     type="text"
                                     value={step.weight}
                                     onChange={(e) => handleStepChange(index, 'weight', e.target.value)}
+                                    onKeyDown={handleStepKeyDown}
                                 />
                             </Col>
                             <Col md={2}>

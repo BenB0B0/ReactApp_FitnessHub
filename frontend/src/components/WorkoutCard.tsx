@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import { Card, Button, ListGroup, Collapse } from "react-bootstrap";
-import { Trash, Youtube, Calendar2Check, Clock, Signpost, Activity, FileEarmarkRuled, Fire } from "react-bootstrap-icons";
+import { Trash, Youtube, Calendar2Check, Clock, Signpost, Activity, FileEarmarkRuled, Fire, CardChecklist } from "react-bootstrap-icons";
 import { Workout } from '../types/workout';
 import { useWorkout } from "../context/WorkoutContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { isAfter, startOfToday } from 'date-fns';
+import { useRoutine } from "../context/RoutineContext";
+import IframeVideo from "./IframeVideo";
+
 
 interface WorkoutsCardProps {
   workout: Workout;
@@ -15,8 +19,12 @@ interface WorkoutsCardProps {
 const WorkoutCard = ({ workout, expandAll, onEdit }: WorkoutsCardProps) => {
   // **** STATES ****
   const [open, setOpen] = useState(false);
+  const [showVideoModal, setShowVideoModal] = useState(false);
   // **** CONTEXTS ****
   const { deleteWorkout, workoutOptions } = useWorkout();
+  const { routines, setSearchTerm } = useRoutine();
+  const navigate = useNavigate();
+
 
   // **** HELPERS ****  
   const findIconForWorkout = (workoutName: string) => {
@@ -25,6 +33,16 @@ const WorkoutCard = ({ workout, expandAll, onEdit }: WorkoutsCardProps) => {
   };
 
   const workoutIcon = findIconForWorkout(workout.name);
+
+  const handleRoutineSelect = (routineId: string | number | undefined) => {
+    if (!routineId) return;
+
+    const routine = routines.find(r => r.id?.toString() === routineId.toString());
+    if (!routine) return;
+
+    setSearchTerm(routine.name);
+    navigate('/routines');
+  };
 
   // **** USE EFFECTS ****
   useEffect(() => {
@@ -43,7 +61,7 @@ const WorkoutCard = ({ workout, expandAll, onEdit }: WorkoutsCardProps) => {
     <Card className="mb-3" bg="light" text="dark" border={isAfter(workout.date, startOfToday()) ? ("warning") : ("")}>
 
       <Card.Header
-        className="bg-dark text-white"
+        className="bg-dark text-white p-2"
         style={{ cursor: 'pointer' }}
         onClick={() => setOpen(prev => !prev)}
       >
@@ -51,14 +69,20 @@ const WorkoutCard = ({ workout, expandAll, onEdit }: WorkoutsCardProps) => {
           {/* Left side: workout icon and name */}
           <div className="d-flex align-items-center">
             {workoutIcon ? (
-              <FontAwesomeIcon
-                icon={workoutIcon}
-                className="me-2 text-warning hover-scale"
+              <Button
+                type="button"
+                className="me-2"
+                variant="outline-warning"
+                size="sm"
+                title="Edit Workout"
                 onClick={(e) => {
                   e.stopPropagation();
                   onEdit();
-                }}
-              />
+                }}>
+                <FontAwesomeIcon
+                  icon={workoutIcon}
+                  className="hover-scale"
+                /></Button>
             ) : (
               <Activity className="me-2" />
             )}
@@ -83,14 +107,9 @@ const WorkoutCard = ({ workout, expandAll, onEdit }: WorkoutsCardProps) => {
                 </div>
                 {/* YouTube Link aligned to the right */}
                 {workout.url && (
-                  <Card.Link href={workout.url} target="_blank" className="text-warning">
-                    <Youtube
-                      size={24}
-                      style={{ cursor: 'pointer', transition: 'transform 0.2s ease, color 0.2s ease' }}
-                      onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
-                      onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-                    />
-                  </Card.Link>
+                  <Button variant="link" className="text-warning p-0" onClick={() => setShowVideoModal(true) }>
+                    <Youtube title="Open Video" className="hover-scale"/>
+                  </Button>
                 )}
               </div>
 
@@ -116,28 +135,48 @@ const WorkoutCard = ({ workout, expandAll, onEdit }: WorkoutsCardProps) => {
 
               {/* Intensity */}
               {(workout.intensity === "Medium" || workout.intensity === "High") && (
-              <div className="position-absolute bottom-0 end-0">
-                <small>
-                  <Fire className={workout.intensity === "High" ? "text-warning" : "text-white"}/>
-                </small>
-              </div>)}
+                <div className="position-absolute bottom-0 end-0">
+                  <small>
+                    <Fire title={"Intensity: " + workout.intensity} className={workout.intensity === "High" ? "text-warning" : "text-white"} />
+                  </small>
+                </div>)}
 
             </ListGroup.Item>
           </Card.Body>
 
-          {/* Delete Button */}
-          <div className="d-flex justify-content-end p-2">
-            <Button type="button" form="workoutForm" variant="outline-danger"
+          <div className="d-flex justify-content-between align-items-center p-2">
+
+            {/* Left: Routine Icon */}
+            <div>
+              {workout.routine_id && (
+                <CardChecklist title="Routine Attached" className="ms-2 text-dark hover-scale" onClick={() => handleRoutineSelect(workout.routine_id || '')} />
+              )}
+
+            </div>
+
+            {/* Right: Delete Button */}
+            <Button
+              type="button"
+              form="workoutForm"
+              variant="outline-danger"
+              size="sm"
               onClick={() => {
                 if (window.confirm("Are you sure you want to delete this workout?")) {
                   deleteWorkout(workout.id);
                 }
-              }}>
-              <Trash className="fs-6" />
+              }}
+            >
+              <Trash className=" hover-scale" />
             </Button>
+
           </div>
         </div>
       </Collapse>
+      <IframeVideo
+        show={showVideoModal}
+        onClose={() => setShowVideoModal(false)}
+        url={workout.url}
+      />
     </Card>
   );
 };

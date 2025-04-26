@@ -20,6 +20,7 @@ const Home = () => {
     };
 
     return (
+        <> {workoutsLoading ? (<LoadingSpinner/>) : (
         <Container className="py-5 text-center">
             <h1 className="display-4 mb-3 text-primary fw-bold">Welcome Back, {user.name} 👋</h1>
             <p className="lead text-muted mb-5">Let’s crush some goals today. Track your progress and keep moving forward.</p>
@@ -56,9 +57,7 @@ const Home = () => {
                             </Card.Body>
                         </Card>
                     ) : (
-                        <p className="text-muted">
-                        {workoutsLoading ? (<LoadingSpinner/>) : ("No workouts yet. Let's get started!")}
-                        </p>
+                        <p className="text-muted">"No workouts yet. Let's get started!"</p>
                     )}
                 </Col>
             </Row>
@@ -84,6 +83,7 @@ const Home = () => {
                 </Col>
             </Row>
         </Container>
+        )}; </>
     );
 };
 

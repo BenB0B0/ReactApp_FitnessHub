@@ -1,11 +1,15 @@
-import { Table, Badge } from 'react-bootstrap';
+import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import { Table, Badge, Button } from 'react-bootstrap';
 import { CSVLink } from "react-csv";
-import { Trash, Youtube, Signpost, Clock, Calendar2Check, FileEarmarkRuled, FiletypeCsv, Fire } from "react-bootstrap-icons";
+import { Trash, Youtube, Signpost, Clock, Calendar2Check, FiletypeCsv, Fire, CardChecklist } from "react-bootstrap-icons";
 import { Workout } from '../types/workout';
 import { useWorkout } from "../context/WorkoutContext";
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { isAfter, startOfToday } from 'date-fns';
+import { useRoutine } from "../context/RoutineContext";
+import IframeVideo from "./IframeVideo";
 
 interface WorkoutsTableProps {
   workouts: Workout[];
@@ -13,15 +17,28 @@ interface WorkoutsTableProps {
 }
 
 const WorkoutTables = ({ workouts, onEdit }: WorkoutsTableProps) => {
+  const [showVideoModal, setShowVideoModal] = useState(false);
   // **** CONTEXTS ****
   const { deleteWorkout, workoutOptions } = useWorkout();
-  
+  const { routines, setSearchTerm } = useRoutine();
+  const navigate = useNavigate();
 
   // **** HELPERS ****
   const findIconForWorkout = (workoutName: string) => {
     const workoutOption = workoutOptions.find(option => option.value === workoutName);
     return workoutOption ? workoutOption.icon : faQuestionCircle;
   };
+
+  const handleRoutineSelect = (routineId: string | number | undefined) => {
+    if (!routineId) return;
+
+    const routine = routines.find(r => r.id?.toString() === routineId.toString());
+    if (!routine) return;
+
+    setSearchTerm(routine.name);
+    navigate('/routines');
+  };
+
 
   // **** CSV DOWNLOAD ****
   const headers = Object.keys(workouts[0] || {}).map((key) => ({
@@ -55,14 +72,25 @@ const WorkoutTables = ({ workouts, onEdit }: WorkoutsTableProps) => {
           {workouts.map((workout_) => (
             <tr key={workout_.id}>
               {/* Name with Video Icon Link */}
-              <td className="hover-no-scale" onClick={(e) => {e.stopPropagation();onEdit(workout_);}}>
+              <td >
                 <div className="d-flex align-items-center">
-                  <FontAwesomeIcon icon={findIconForWorkout(workout_.name)} className="me-2" /><span>{workout_.name}</span>
+                  <Button
+                    type="button"
+                    className="ms-1"
+                    variant="outline-warning"
+                    size="sm"
+                    title="Routine Attached"
+                    onClick={(e) => { e.stopPropagation(); onEdit(workout_); }}>
+                    <FontAwesomeIcon icon={findIconForWorkout(workout_.name)} className="hover-scale me-2" /><span>{workout_.name}</span>
+                  </Button>
+                  {workout_.routine_id && (
+                    <CardChecklist title="Routine Attached" className="ms-2 text-warning hover-scale" onClick={() => handleRoutineSelect(workout_.routine_id || '')} />
+                  )}
                   {isAfter(workout_.date, startOfToday()) &&
                     <Badge className='ms-2' pill bg="success" text="white"> Upcoming</Badge>
                   }
-                  {workout_.note && <small><FileEarmarkRuled className='ms-2 text-warning'/></small>}
                   {workout_.intensity === "High" && (<small><Fire className="ms-2 text-warning" /></small>)}
+
                 </div>
               </td>
 
@@ -86,12 +114,17 @@ const WorkoutTables = ({ workouts, onEdit }: WorkoutsTableProps) => {
               {/* Video URL */}
               <td className="text-center w-auto" style={{ width: 'auto', whiteSpace: 'nowrap', border: 'none' }}>
                 {workout_.url && (
-                  <Youtube href={workout_.url} target="_blank" size={24} className="text-warning hover-scale" />
+                  <Youtube href={workout_.url} target="_blank" size={24} className="text-warning hover-scale"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setShowVideoModal(true);
+                    }}
+                  />
                 )}
               </td>
 
               {/* Delete */}
-              <td className="text-center w-auto" style={{ width: 'auto', whiteSpace: 'nowrap', border: 'none'}}>
+              <td className="text-center w-auto" style={{ width: 'auto', whiteSpace: 'nowrap', border: 'none' }}>
                 <Trash
                   onClick={() => {
                     if (window.confirm("Are you sure you want to delete this workout?")) {
@@ -100,7 +133,13 @@ const WorkoutTables = ({ workouts, onEdit }: WorkoutsTableProps) => {
                   }}
                   className="fs-6 text-danger hover-scale" />
               </td>
+              <IframeVideo
+                show={showVideoModal}
+                onClose={() => setShowVideoModal(false)}
+                url={workout_.url}
+              />
             </tr>
+
           ))}
         </tbody>
       </Table>

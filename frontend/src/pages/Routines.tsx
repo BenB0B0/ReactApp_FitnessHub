@@ -14,7 +14,26 @@ const Routine = () => {
     // **** USE EFFECT CALLS ****
     useEffect(() => {
         getRoutines();
+        const matchingRoutine = filteredRoutines.find(r => r.name === searchTerm);
+        if (matchingRoutine) {
+            setActiveKey(matchingRoutine.id?.toString() ?? null);
+        } else {
+            setActiveKey(null);
+            setSearchTerm('');
+        }
     }, []);
+
+    const handleAccordionClick = (routineId: string, routineName: string) => {
+        setActiveKey(prev => {
+            const newKey = prev === routineId ? null : routineId;
+          
+            setTimeout(() => {
+              setSearchTerm(newKey === null ? '' : routineName);
+            }, 0);
+          
+            return newKey;
+        });
+    };
 
     return (
         <div className="p-4">
@@ -32,22 +51,9 @@ const Routine = () => {
                     {filteredRoutines.map((routine) => (
                         <div key={routine.id} className="mb-2">
                             <RoutineList
-                                routine={routine}
-                                activeKey={activeKey}
-                                setActiveKey={(key) => {
-                                    setActiveKey(prev => {
-                                        const newKey = prev === key ? null : key;
-
-                                        // Set or clear search depending on whether it's being toggled open or closed
-                                        if (newKey === null) {
-                                            setSearchTerm('');
-                                        } else {
-                                            setSearchTerm(routine.name);
-                                        }
-
-                                        return newKey;
-                                    });
-                                }}
+                            routine={routine}
+                            activeKey={activeKey}
+                            onClick={() => handleAccordionClick(String(routine.id), routine.name)}
                             />
                         </div>
                     ))}

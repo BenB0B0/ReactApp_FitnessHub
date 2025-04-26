@@ -11,7 +11,8 @@ export interface Workout {
     date: string,
     id: string,
     note: string,
-    intensity: string
+    intensity: string,
+    routine_id: string
 }
 
 // --------- WORKOUT OPTION TYPES ---------

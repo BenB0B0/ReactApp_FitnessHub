@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import { Routine } from "../types/routine";
+import { Routine, CategoryOptions, category } from "../types/routine";
 import * as routineService from "../services/routineService";
 import { useAuth } from "../context/AuthContext";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -13,6 +13,7 @@ interface RoutineContextType {
     addRoutine: (newRoutine: Routine) => void;
     editRoutine: (newRoutine: Routine) => void;
     deleteRoutine: (routineId: string) => void;
+    category: CategoryOptions[];
     routinesLoading: boolean;
     setRoutinesLoading: React.Dispatch<React.SetStateAction<boolean>>;
     filteredRoutines: Routine[];
@@ -61,13 +62,8 @@ export const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children })
     // Add new routine
     const addRoutine = async (newRoutine: Routine) => {
         try {
-            const addedRoutine = await routineService.addRoutine(newRoutine); 
-
-            setRoutines((prevRoutines) => {
-                const updatedRoutines = [addedRoutine, ...prevRoutines]; 
-                return updatedRoutines; 
-            });
-
+            await routineService.addRoutine(newRoutine); 
+            await getRoutines();
             showAlert("Routine Added!", "success");
         } catch (error) {
             console.error(error);
@@ -77,14 +73,9 @@ export const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children })
     // Edit existing routine
     const editRoutine = async (newRoutine: Routine) => {
         try {
-            const addedRoutine = await routineService.editRoutine(newRoutine); 
+            await routineService.editRoutine(newRoutine); 
 
-            setRoutines((prevRoutines) => {
-                const updatedRoutines = prevRoutines.map((w) =>
-                  w.id === addedRoutine.id ? addedRoutine : w
-                );
-                return updatedRoutines;
-            });
+            await getRoutines();
 
             showAlert("Routine Edited!", "info");
 
@@ -97,8 +88,9 @@ export const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children })
     const deleteRoutine = async (routineId: string) => {
         try {
             await routineService.deleteRoutine(routineId); 
-            setRoutines((prevRoutines) => prevRoutines.filter((routine) => routine.id !== routineId));
+            await getRoutines();
             showAlert("Routine Deleted!", "danger");
+            setSearchTerm('');
         } catch (error) {
             console.error(error);
         }
@@ -118,7 +110,8 @@ export const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children })
             getRoutines, 
             addRoutine, 
             editRoutine,
-            deleteRoutine, 
+            deleteRoutine,
+            category,
             routinesLoading,
             setRoutinesLoading,
             filteredRoutines,
