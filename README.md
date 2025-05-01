@@ -6,8 +6,6 @@
 2. [Installation](#installation)
 3. [Features](#features)
 4. [Todos](#todos)
-5. [CI/CD with Azure](#cicd-with-azure)
-6. [Dockerization](#dockerization)
 
 ## Description
 This project is a fitness tracking application. You can track individual workouts, get generalized stats, and interact with an ai workout coach.
@@ -18,9 +16,9 @@ Follow these steps to get the project up and running on your local machine:
 
 ### STACK
 [React/Vite]
-[Flask] [SQLAlchemy]
+[Flask] [SQLAlchemy] [*Supabase*]
 [Docker]
-[Azure]
+[Render-(hosting)]
 
 #### (below steps are replaced now with docker)
 1. Clone the repository:
