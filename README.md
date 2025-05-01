@@ -22,6 +22,7 @@ Follow these steps to get the project up and running on your local machine:
 [Docker]
 [Azure]
 
+#### (below steps are replaced now with docker)
 1. Clone the repository:
     ```bash
     git clone
@@ -63,7 +64,7 @@ Follow these steps to get the project up and running on your local machine:
 - [X] Upgrade to supabase postgres db
 4. HOSTING/PIPELINE:
 - [x] Dockerize the application
-- [ ] Set up CI/CD flow (hosting on *render*)
+- [x] CI/CD + Hosting (hosting on *render*)
 5. AI:
 - [ ] Create an AI helper to assist with auto routines (api key in settings?)
 6. OUTSIDE SOURCES:
@@ -71,11 +72,3 @@ Follow these steps to get the project up and running on your local machine:
 7. NICE TO HAVES:
 - [ ] Themes
 - [ ] Mobile
-
-## CI/CD with Azure
-- Set up CICD pipelines through Azure DevOps.
-- Ensure that each push to the repository triggers automated builds, followed by deployment.
-
-## Dockerization
-- Create a `Dockerfile` for the application to containerize it.
-- Set up a `docker-compose.yml` for local development to manage dependencies.
