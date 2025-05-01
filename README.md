@@ -1,4 +1,5 @@
 # Fitness Hub Project
+[App Preview](https://reactapp-fitnesshub-frontend.onrender.com)
 
 ## Table of Contents
 1. [Description](#description)
@@ -62,7 +63,7 @@ Follow these steps to get the project up and running on your local machine:
 - [X] Upgrade to supabase postgres db
 4. HOSTING/PIPELINE:
 - [x] Dockerize the application
-- [ ] Set up CI/CD flow
+- [ ] Set up CI/CD flow (hosting on *render*)
 5. AI:
 - [ ] Create an AI helper to assist with auto routines (api key in settings?)
 6. OUTSIDE SOURCES:
