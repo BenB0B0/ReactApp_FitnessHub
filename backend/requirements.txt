@@ -1,8 +1,9 @@
 Flask
 Flask-SQLAlchemy
+flask_cors
 openai
 pinecone-client
 langgraph
 python-dotenv
-jose
+python-jose
 psycopg2-binary

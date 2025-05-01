@@ -78,13 +78,11 @@ logs/
 # OS-specific files
 .DS_Store
 
-# Docker related files (if you are using Docker)
+# Docker
 docker-compose.yml
 Dockerfile
 
 # Backend stuff
-backend/venv/Lib/
-backend/venv/var/
-backend/venv/Scripts/
-backend/venv/__pycache__/
+backend-venv/
+backend/__pycache__/
 */Scripts/

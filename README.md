@@ -61,7 +61,7 @@ Follow these steps to get the project up and running on your local machine:
 3. DB:
 - [X] Upgrade to supabase postgres db
 4. HOSTING/PIPELINE:
-- [ ] Dockerize the application
+- [x] Dockerize the application
 - [ ] Set up CI/CD flow
 5. AI:
 - [ ] Create an AI helper to assist with auto routines (api key in settings?)
