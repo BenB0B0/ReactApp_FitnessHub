@@ -39,9 +39,6 @@ coverage/
 # Dependency directories
 node_modules/
 
-# Docker related files (if you’re using Docker)
-.docker/
-
 # GitHub / GitLab CI/CD related
 .gitlab-ci.yml
 .circleci/
@@ -80,7 +77,6 @@ logs/
 
 # Docker
 docker-compose.yml
-Dockerfile
 
 # Backend stuff
 backend-venv/
