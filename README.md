@@ -1,5 +1,5 @@
 # Fitness Hub Project
-[App Preview](https://reactapp-fitnesshub-frontend.onrender.com)
+⭐[App Preview](https://reactapp-fitnesshub-frontend.onrender.com)
 
 ## Table of Contents
 1. [Description](#description)
