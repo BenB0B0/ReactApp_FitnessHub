@@ -12,7 +12,6 @@ This project is a fitness tracking application. You can track individual workout
 
 ## Installation
 Follow these steps to get the project up and running on your local machine:
-> (have a todo to dockerize this setup)
 
 ### STACK
 [React/Vite]
@@ -20,7 +19,7 @@ Follow these steps to get the project up and running on your local machine:
 [Docker]
 [Render-(hosting)]
 
-#### (below steps are replaced now with docker)
+> (below steps are replaced now with docker)
 1. Clone the repository:
     ```bash
     git clone
