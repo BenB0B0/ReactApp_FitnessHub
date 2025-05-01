@@ -66,7 +66,7 @@ const Workouts = () => {
 
                     <span className="text-muted small ms-2">({filteredWorkouts.length})</span>
                     <div className="d-flex align-items-center ms-auto">
-                        <Form>
+                        <Form className="d-none d-md-block">
                             <Form.Check
                                 type="switch"
                                 id="table-slider"
