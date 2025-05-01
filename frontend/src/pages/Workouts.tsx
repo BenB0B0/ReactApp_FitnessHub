@@ -34,6 +34,12 @@ const Workouts = () => {
         return workoutDate >= today;
     });
 
+    const resortFutureOrTodayWorkouts = (workouts: Workout[]) => {
+            return workouts.sort((b, a) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    };
+
+    resortFutureOrTodayWorkouts(futureOrTodayWorkouts);
+
     const pastWorkouts = currentWorkouts.filter(w => {
         const workoutDate = new Date(w.date);
         workoutDate.setHours(0, 0, 0, 0);
