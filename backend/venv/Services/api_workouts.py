@@ -36,7 +36,7 @@ def create_workout():
                 date=workout_date,
                 note=data['note'],
                 intensity=data['intensity'],
-                routine_id=data.get('routine_id')
+                routine_id=data.get('routine_id') or None
             )
     db.session.add(new_workout)
     db.session.commit()
@@ -64,10 +64,10 @@ def update_workout(workout_id):
     workout.time_length = data.get('time_length', workout.time_length)
     workout.distance = data.get('distance', workout.distance)
     workout.url = data.get('url', workout.url)
-    workout.user_id = data.get('user_id', workout.user_id)
+    workout.user_id = data.get('user_id', workout.user_id) or None
     workout.note = data.get('note', workout.note)
     workout.intensity = data.get('intensity', workout.intensity)
-    workout.routine_id = data.get('routine_id', workout.routine_id)
+    workout.routine_id = data.get('routine_id', workout.routine_id) or None
 
     db.session.commit()
 
@@ -122,7 +122,7 @@ def get_routines():
             ],
             'steps': [
                 {
-                    'id': step.id,
+                    'id': step.id or None,
                     'exercise': step.exercise,
                     'reps': step.reps,
                     'sets': step.sets,
@@ -143,7 +143,7 @@ def create_routine():
         name=data.get('name'),
         note=data.get('note'),
         category=data.get('category'),
-        user_id=data.get('user_id')
+        user_id=data.get('user_id') or None
     )
 
     for eq_data in data.get('equipment', []):
@@ -195,7 +195,7 @@ def update_routine(routine_id):
     # Add updated steps
     for step_data in data.get('steps', []):
         step = RoutineStep(
-            routine_id=routine.id,
+            routine_id=routine.id or None,
             exercise=step_data['exercise'],
             reps=step_data['reps'],
             sets=step_data['sets'],

@@ -59,10 +59,10 @@ Follow these steps to get the project up and running on your local machine:
 - [x] Routines Page 
 - [x] Stats page
 3. DB:
-- [ ] Upgrade from SQL Alch
-4. PIPELINE:
+- [X] Upgrade to supabase postgres db
+4. HOSTING/PIPELINE:
 - [ ] Dockerize the application
-- [ ] Set up CI/CD flow through Azure
+- [ ] Set up CI/CD flow
 5. AI:
 - [ ] Create an AI helper to assist with auto routines (api key in settings?)
 6. OUTSIDE SOURCES:

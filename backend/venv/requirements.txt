@@ -5,3 +5,4 @@ pinecone-client
 langgraph
 python-dotenv
 jose
+psycopg2-binary

@@ -62,6 +62,7 @@ const WorkoutTables = ({ workouts, onEdit }: WorkoutsTableProps) => {
               headers={headers}
               data={workouts}
               filename="workouts.csv"
+              title="Download Data as CSV"
               className="text-success hover-scale d-inline-block"
             > <FiletypeCsv size={20} />
             </CSVLink></th>
@@ -79,7 +80,7 @@ const WorkoutTables = ({ workouts, onEdit }: WorkoutsTableProps) => {
                     className="ms-1"
                     variant="outline-warning"
                     size="sm"
-                    title="Routine Attached"
+                    title="Edit Workout"
                     onClick={(e) => { e.stopPropagation(); onEdit(workout_); }}>
                     <FontAwesomeIcon icon={findIconForWorkout(workout_.name)} className="hover-scale me-2" /><span>{workout_.name}</span>
                   </Button>
@@ -125,13 +126,19 @@ const WorkoutTables = ({ workouts, onEdit }: WorkoutsTableProps) => {
 
               {/* Delete */}
               <td className="text-center w-auto" style={{ width: 'auto', whiteSpace: 'nowrap', border: 'none' }}>
-                <Trash
-                  onClick={() => {
-                    if (window.confirm("Are you sure you want to delete this workout?")) {
-                      deleteWorkout(workout_.id);
-                    }
-                  }}
-                  className="fs-6 text-danger hover-scale" />
+              <Button
+                    type="button"
+                    className="ms-1"
+                    variant="outline-danger"
+                    size="sm"
+                    title="Delete Workout"
+                    onClick={() => {
+                      if (window.confirm("Are you sure you want to delete this workout?")) {
+                        deleteWorkout(workout_.id);
+                      }
+                    }} >
+                <Trash />
+              </Button>
               </td>
               <IframeVideo
                 show={showVideoModal}

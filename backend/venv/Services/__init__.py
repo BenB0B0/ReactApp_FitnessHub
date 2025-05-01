@@ -7,7 +7,8 @@ import os
 load_dotenv()
 
 db = SQLAlchemy()
-DB_NAME = os.getenv('DB_NAME')
+#DB_NAME = os.getenv('DB_NAME')
+DATABASE_URL = os.getenv('DATABASE_URI')
 
 
 def create_app():
@@ -15,7 +16,9 @@ def create_app():
     CORS(app)
 
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    #app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+    print("Database URI:", app.config['SQLALCHEMY_DATABASE_URI'])
 
     db.init_app(app)
 

@@ -37,6 +37,6 @@ export interface CategoryOptions {
 
 export const category: CategoryOptions[] = [
     { value: "Cardio", label: "Cardio", icon: Icons.faPersonRunning },
-    { value: "Weight Lifting", label: "Weight Lifting", icon: Icons.faDumbbell },
+    { value: "Strength", label: "Strength", icon: Icons.faDumbbell },
     { value: "Mix", label: "Mix", icon: Icons.faFireAlt },
 ].sort((a, b) => a.label.localeCompare(b.label));

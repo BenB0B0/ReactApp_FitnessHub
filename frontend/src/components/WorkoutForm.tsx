@@ -198,7 +198,7 @@ const WorkoutsForm: React.FC<WorkoutsFormProps> = ({ initialFormData }) => {
                                         className="fs-6"
                                     />
                                 ) : (
-                                    "+ Select Routine"
+                                    "+ Associate Routine"
                                 )
                             }
                             variant="outline-success"

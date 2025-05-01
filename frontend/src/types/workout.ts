@@ -39,4 +39,15 @@ export const workoutOptions: WorkoutOption[] = [
     { value: "Hike", label: "Hike", icon: Icons.faHiking, distance_req:true, url_req: false, cardio:true },
     { value: "Bike", label: "Bike", icon: Icons.faBiking, distance_req:true, url_req: false, cardio:true },
     { value: "Pickle Ball", label: "Pickle Ball", icon: Icons.faTableTennisPaddleBall, distance_req:false, url_req: false, cardio:true },
+
+    { value: "Rowing", label: "Rowing", icon: Icons.faWater, distance_req:true, url_req: false, cardio:true },
+    { value: "Indoor Bike", label: "Indoor Bike", icon: Icons.faBicycle, distance_req:true, url_req: false, cardio:true },
+    { value: "Stair Climb", label: "Stair Climb", icon: Icons.faStairs, distance_req:false, url_req: false, cardio:true },
+    { value: "Core Workout", label: "Core Workout", icon: Icons.faUserNinja, distance_req:false, url_req: true, cardio:false },
+    { value: "Dance", label: "Dance", icon: Icons.faMusic, distance_req:false, url_req: true, cardio:true },
+    { value: "Tennis", label: "Tennis", icon: Icons.faTableTennis, distance_req:false, url_req: false, cardio:true },
+    { value: "Soccer", label: "Soccer", icon: Icons.faSoccerBall, distance_req:false, url_req: false, cardio:true },
+    { value: "Stretching", label: "Stretching", icon: Icons.faPersonArrowDownToLine, distance_req:false, url_req: false, cardio:false },
+    { value: "CrossFit", label: "CrossFit", icon: Icons.faWeightHanging, distance_req:false, url_req: true, cardio:true },
+    { value: "Climbing", label: "Climbing", icon: Icons.faMountain, distance_req:false, url_req: false, cardio:true },
 ].sort((a, b) => a.label.localeCompare(b.label));
