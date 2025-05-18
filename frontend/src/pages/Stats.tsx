@@ -9,21 +9,34 @@ const Stats = () => {
     const { workouts, workoutOptions } = useWorkout();
 
     // --- Radar
-    const workoutCounts = workoutOptions.map((opt) => ({
-        name: opt.label,
-        count: workouts.filter((w) => w.name === opt.value).length,
-    }));
+    const workoutCounts = workoutOptions
+        .map((opt) => ({
+            name: opt.label,
+            count: workouts.filter((w) => w.name === opt.value).length,
+        }))
+        .filter((item) => item.count > 0);
 
     // --- Streaks
     // Get unique workout dates as YYYY-MM-DD
+    // 1. Get unique workout days as strings (YYYY-MM-DD)
     const workoutDays = Array.from(new Set(
         workouts.map(w => new Date(w.date).toISOString().split("T")[0])
     )).sort();
 
-    // Convert to Date objects
-    const dateObjs = workoutDays.map(d => new Date(d));
+    // 2. Convert to Date objects (normalized to midnight), excluding future dates
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    // Streak calculation
+    const dateObjs = workoutDays
+        .map(d => {
+            const date = new Date(d);
+            date.setHours(0, 0, 0, 0);
+            return date;
+        })
+        .filter(d => d <= today)
+        .sort((a, b) => a.getTime() - b.getTime());
+
+    // 3. Longest streak calculation
     let longest = 0;
     let current = 1;
 
@@ -39,8 +52,18 @@ const Stats = () => {
             current = 1;
         }
     }
-
     const longestStreak = Math.max(longest, current);
+
+    // 4. Current streak calculation (count back from today)
+    const dateSet = new Set(dateObjs.map(d => d.toDateString()));
+    let currentStreak = 0;
+    let streakDay = new Date(today);
+
+    while (dateSet.has(streakDay.toDateString())) {
+        currentStreak += 1;
+        streakDay.setDate(streakDay.getDate() - 1);
+    }
+
 
 
     // --- Distance over time 
@@ -50,7 +73,7 @@ const Stats = () => {
         const date = new Date(w.date).toISOString().split("T")[0];
         const distance = w.distance || 0;
 
-        if (distance > 0) {
+        if (distance > 0 && w.name === "Run") {
             if (!distancePerDayMap[date]) {
                 distancePerDayMap[date] = 0;
             }
@@ -95,15 +118,25 @@ const Stats = () => {
     return (
         <Container className="py-4">
             <h2 className="text-center mb-4">Your Breakdown</h2>
-            <Row>
-                <Card className="text-center p-4 shadow mb-4 bg-light">
-                    <h5>🔥 Longest Streak</h5>
-                    <h2 className="text-primary">{longestStreak} days</h2>
-                </Card>
-            </Row>
+
             <Row>
                 <Col md={6}>
-                    <Card className="m-3">
+                    <Card className="text-center p-4 shadow mb-3 bg-light">
+                        <h5>🔥 Longest Streak</h5>
+                        <h2 className="text-primary">{longestStreak} days</h2>
+                    </Card>
+                </Col>
+                <Col md={6}>
+                    <Card className="text-center p-4 shadow mb-3 bg-light">
+                        <h5>🎯 Current Streak</h5>
+                        <h2 className="text-primary">{currentStreak - 1} days</h2>
+                    </Card>
+                </Col>
+            </Row>
+
+            <Row>
+                
+                    <Card className="mb-4">
                         <ResponsiveContainer width="100%" height={300}>
                             <RadarChart outerRadius="80%" data={workoutCounts}>
                                 <PolarGrid />
@@ -114,24 +147,13 @@ const Stats = () => {
                             </RadarChart>
                         </ResponsiveContainer>
                     </Card>
-                </Col>
-
-                <Col md={6}>
-                    <Card className="text-center p-4 shadow mb-4 bg-light">
-                        <h5>🏃‍♂️ Longest Run</h5>
-                        <h2 className="text-primary">{maxRun} miles</h2>
-                    </Card>
-                    <Card className="text-center p-4 shadow mb-4 bg-light">
-                        <h5>🚴 Longest Bike Ride</h5>
-                        <h2 className="text-primary">{maxBike} miles</h2>
-                    </Card>
-                </Col>
+                
             </Row>
 
             <Row>
                 <Col md={6}>
                     <Card className="p-3 mb-4">
-                        <h5>Cardio Breakdown</h5>
+                        <h5>Cardio Category Breakdown</h5>
                         <ResponsiveContainer width="100%" height={250}>
                             <BarChart data={cardioTypes}>
                                 <XAxis dataKey="name" />
@@ -142,8 +164,40 @@ const Stats = () => {
                         </ResponsiveContainer>
                     </Card>
                 </Col>
+                
                 <Col md={6}>
-                    <Card className="p-3 mb-4">
+                <Card className="p-3 mb-4">
+                        <h5>Strength Category Breakdown</h5>
+                        <ResponsiveContainer width="100%" height={250}>
+                            <BarChart data={weightTypes}>
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Bar dataKey="value" fill="#dc3545" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </Card>
+                </Col>
+            </Row>
+
+            <Row>
+                <Col md={6}>
+                    <Card className="text-center p-4 shadow mb-4 bg-light">
+                        <h5>🏃‍♂️ Longest Run</h5>
+                        <h2 className="text-primary">{maxRun} miles</h2>
+                    </Card>
+                </Col>
+                <Col md={6}>
+                    <Card className="text-center p-4 shadow mb-4 bg-light">
+                        <h5>🚴 Longest Bike Ride</h5>
+                        <h2 className="text-primary">{maxBike} miles</h2>
+                    </Card>
+                </Col>
+            </Row>
+
+            <Row>
+                <Col md={6}>
+                <Card className="p-3 mb-4">
                         <h5>Cardio vs Strength</h5>
                         <ResponsiveContainer width="100%" height={250}>
                             <PieChart>
@@ -158,25 +212,9 @@ const Stats = () => {
                         </ResponsiveContainer>
                     </Card>
                 </Col>
-            </Row>
-
-            <Row>
                 <Col md={6}>
                     <Card className="p-3 mb-4">
-                        <h5>Strength Breakdown</h5>
-                        <ResponsiveContainer width="100%" height={250}>
-                            <BarChart data={weightTypes}>
-                                <XAxis dataKey="name" />
-                                <YAxis />
-                                <Tooltip />
-                                <Bar dataKey="value" fill="#dc3545" />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </Card>
-                </Col>
-                <Col md={6}>
-                    <Card className="p-3 mb-4">
-                        <h5>Distances Over Time</h5>
+                        <h5>Run Distance Trends</h5>
                         <ResponsiveContainer width="100%" height={250}>
                             <LineChart data={distancePerDay}>
                                 <CartesianGrid strokeDasharray="3 3" />
